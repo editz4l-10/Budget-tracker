@@ -49,6 +49,7 @@
   }
   .lock-btn:hover { opacity: 0.85; }
   .lock-error { font-size: 12.5px; color: var(--accent-over); margin: 10px 0 0; min-height: 16px; }
+  .lock-hint { font-size: 12px; color: var(--text-faint); margin: 6px 0 0; }
 
   .tracker { max-width: 480px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
   .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
@@ -157,10 +158,11 @@
 <!-- Lock screen -->
 <div class="lock-screen" id="lock-screen">
   <div class="lock-card">
-    <p class="lock-title">Enter passcode</p>
-    <input type="password" inputmode="numeric" class="lock-input" id="lock-input" placeholder="••••" autofocus />
+    <p class="lock-title">Enter your 4-digit passcode</p>
+    <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" class="lock-input" id="lock-input" placeholder="••••" autofocus />
     <button class="lock-btn" id="lock-submit">Unlock</button>
     <p class="lock-error" id="lock-error"></p>
+    <p class="lock-hint" id="lock-hint">First time? Type any new 4-digit code to create your own tracker.</p>
   </div>
 </div>
 
@@ -192,8 +194,9 @@
   const fbApp = initializeApp(firebaseConfig);
   const db = getFirestore(fbApp);
 
-  const PASSCODE = "2010";
-  const SESSION_KEY = "budget-tracker-unlocked";
+  const PASSCODE_PATTERN = /^[0-9]{4}$/;
+  const SESSION_KEY = 'budget-tracker-passcode';
+  let PASSCODE = null;
 
   let state = {
     savingsBalance: 0,
@@ -252,22 +255,26 @@
   function tryUnlock() {
     const input = document.getElementById('lock-input');
     const errorEl = document.getElementById('lock-error');
-    if (input.value === PASSCODE) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      document.getElementById('lock-screen').classList.add('hidden');
-      document.getElementById('tracker-root').classList.remove('hidden');
-      boot();
-    } else {
-      errorEl.textContent = 'Incorrect passcode';
+    const val = input.value.trim();
+    if (!PASSCODE_PATTERN.test(val)) {
+      errorEl.textContent = 'Enter a 4-digit passcode';
       input.value = '';
       input.focus();
+      return;
     }
+    PASSCODE = val;
+    sessionStorage.setItem(SESSION_KEY, PASSCODE);
+    document.getElementById('lock-screen').classList.add('hidden');
+    document.getElementById('tracker-root').classList.remove('hidden');
+    boot();
   }
 
   document.getElementById('lock-submit').addEventListener('click', tryUnlock);
   document.getElementById('lock-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
 
-  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+  const savedPasscode = sessionStorage.getItem(SESSION_KEY);
+  if (savedPasscode && PASSCODE_PATTERN.test(savedPasscode)) {
+    PASSCODE = savedPasscode;
     document.getElementById('lock-screen').classList.add('hidden');
     document.getElementById('tracker-root').classList.remove('hidden');
     boot();
@@ -275,6 +282,7 @@
 
   function lockOut() {
     sessionStorage.removeItem(SESSION_KEY);
+    PASSCODE = null;
     document.getElementById('tracker-root').classList.add('hidden');
     document.getElementById('lock-screen').classList.remove('hidden');
     document.getElementById('lock-input').value = '';
