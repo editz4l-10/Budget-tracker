@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Budget Tracker</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --card: #ffffff;
+    --border: #e5e0d8;
+    --border-light: #efebe3;
+    --text: #2b2723;
+    --text-soft: #8a8378;
+    --text-faint: #b5afa3;
+    --accent-spending: #5DAA8B;
+    --accent-car: #6B6FCB;
+    --accent-over: #C2453F;
+    --accent-savings: #C99B4A;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Lock screen */
+  .lock-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;
+    padding: 1.5rem;
+  }
+  .lock-card {
+    background: var(--card); border: 1px solid var(--border-light); border-radius: 16px;
+    padding: 2rem 1.75rem; max-width: 320px; width: 100%; text-align: center;
+  }
+  .lock-title { font-size: 16px; font-weight: 600; margin: 0 0 1.25rem; }
+  .lock-input {
+    width: 100%; font-size: 20px; text-align: center; letter-spacing: 0.15em;
+    padding: 12px 10px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px;
+  }
+  .lock-input:focus { border-color: var(--text-soft); }
+  .lock-btn {
+    width: 100%; font-size: 14px; padding: 11px; border: none; border-radius: 10px;
+    background: var(--text); color: var(--card); cursor: pointer; font-weight: 500;
+  }
+  .lock-btn:hover { opacity: 0.85; }
+  .lock-error { font-size: 12.5px; color: var(--accent-over); margin: 10px 0 0; min-height: 16px; }
+
+  .tracker { max-width: 480px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
+  .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
+  .title { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .save-status { font-size: 11px; color: var(--text-faint); }
+  .section-label { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.07em; margin: 0 0 8px; font-weight: 600; }
+  .account-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.75rem; }
+  .account-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; }
+  .account-card-label { font-size: 12px; color: var(--text-soft); margin: 0 0 6px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot.savings { background: var(--accent-savings); }
+  .dot.checking { background: var(--text-soft); }
+  .account-balance { font-size: 24px; font-weight: 600; color: var(--text); margin: 0 0 10px; letter-spacing: -0.01em; }
+  .account-input-row { display: flex; align-items: center; gap: 6px; }
+  .account-input-row span { font-size: 13px; color: var(--text-faint); }
+  .account-input-row input {
+    flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg); color: var(--text); outline: none;
+  }
+  .account-input-row input:focus { border-color: var(--text-soft); }
+  .set-btn {
+    font-size: 12px; padding: 6px 11px; border: 1px solid var(--border);
+    border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap;
+  }
+  .set-btn:hover { background: var(--border-light); }
+  .set-btn:active { transform: scale(0.97); }
+  .divider { border: none; border-top: 1px solid var(--border-light); margin: 1.75rem 0; }
+  .paycheck-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.6rem; }
+  .paycheck-row span { font-size: 22px; font-weight: 600; color: var(--text-faint); }
+  .paycheck-row input {
+    font-size: 26px; font-weight: 600; border: none; border-bottom: 2px solid var(--border);
+    background: transparent; color: var(--text); width: 150px; outline: none; padding: 4px 0;
+    letter-spacing: -0.01em;
+  }
+  .paycheck-row input:focus { border-bottom-color: var(--text); }
+  .apply-btn {
+    font-size: 13px; padding: 9px 16px; border: none; border-radius: 9px;
+    background: var(--text); color: var(--card); cursor: pointer; font-weight: 500;
+  }
+  .apply-btn:hover { opacity: 0.85; }
+  .apply-btn:active { transform: scale(0.97); }
+  .split-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.75rem; }
+  .preview-pill {
+    background: var(--card); border: 1px solid var(--border-light); border-radius: 10px;
+    padding: 9px 12px; font-size: 12.5px; color: var(--text-soft); display: flex; justify-content: space-between; align-items: center;
+  }
+  .preview-pill strong { color: var(--text); font-weight: 600; }
+  .category-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .cat-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; }
+  .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .cat-title { font-size: 13.5px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .cat-budget { font-size: 11.5px; color: var(--text-faint); }
+  .progress-bg { background: var(--border-light); border-radius: 99px; height: 6px; margin-bottom: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
+  .progress-fill.spending { background: var(--accent-spending); }
+  .progress-fill.car { background: var(--accent-car); }
+  .progress-fill.over { background: var(--accent-over); }
+  .cat-remaining { font-size: 19px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .cat-remaining.over { color: var(--accent-over); }
+  .log-expense { display: flex; gap: 6px; margin-top: 6px; }
+  .log-expense input {
+    flex: 1; min-width: 0; font-size: 13px; padding: 7px 8px; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--bg); color: var(--text); outline: none;
+  }
+  .log-expense input:focus { border-color: var(--text-soft); }
+  .log-btn {
+    font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px;
+    background: transparent; color: var(--text); cursor: pointer; white-space: nowrap;
+  }
+  .log-btn:hover { background: var(--border-light); }
+  .log-btn:active { transform: scale(0.97); }
+  .history { margin-top: 4px; max-height: 140px; overflow-y: auto; }
+  .history-item {
+    display: flex; justify-content: space-between; align-items: center; padding: 5px 0;
+    border-bottom: 1px solid var(--border-light); font-size: 13px;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-item strong { color: var(--text); font-weight: 600; }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 15px; padding: 0 2px; line-height: 1; }
+  .del-btn:hover { color: var(--accent-over); }
+  .reset-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+  .reset-btn {
+    font-size: 12px; color: var(--text-soft); background: none; border: none;
+    cursor: pointer; padding: 0; display: flex; align-items: center; gap: 4px;
+  }
+  .reset-btn:hover { color: var(--text); }
+  .lock-out-btn { font-size: 12px; color: var(--text-faint); background: none; border: none; cursor: pointer; padding: 0; }
+  .lock-out-btn:hover { color: var(--text); }
+  .empty-state { font-size: 12px; color: var(--text-faint); padding: 4px 0; }
+  .toast {
+    position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(8px);
+    background: var(--text); color: var(--card); border-radius: 10px; padding: 9px 16px;
+    font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none;
+    white-space: nowrap; z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .loading-state { text-align: center; padding: 3rem 0; color: var(--text-faint); font-size: 13px; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- Lock screen -->
+<div class="lock-screen" id="lock-screen">
+  <div class="lock-card">
+    <p class="lock-title">Enter passcode</p>
+    <input type="password" inputmode="numeric" class="lock-input" id="lock-input" placeholder="••••" autofocus />
+    <button class="lock-btn" id="lock-submit">Unlock</button>
+    <p class="lock-error" id="lock-error"></p>
+  </div>
+</div>
+
+<!-- Main app -->
+<div class="tracker hidden" id="tracker-root">
+  <div class="top-row">
+    <p class="title">Budget tracker</p>
+    <span class="save-status" id="save-status"></span>
+  </div>
+  <div id="app-content">
+    <div class="loading-state">Loading your data&hellip;</div>
+  </div>
+</div>
+
+<!-- Firebase (browser module build, no npm/build step needed) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC-ewFMP2sGm9lGWEUgbRjjiUFhurqw4H8",
+    authDomain: "budget-tracker-d4f0d.firebaseapp.com",
+    projectId: "budget-tracker-d4f0d",
+    storageBucket: "budget-tracker-d4f0d.firebasestorage.app",
+    messagingSenderId: "615000868494",
+    appId: "1:615000868494:web:5d8ac8ba54964e62782bdf"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+
+  const PASSCODE = "2010";
+  const SESSION_KEY = "budget-tracker-unlocked";
+
+  let state = {
+    savingsBalance: 0,
+    checkingBalance: 0,
+    spending: { budget: 0, items: [] },
+    car: { budget: 0, items: [] }
+  };
+
+  function fmt(n) { return '$' + Math.abs(n).toFixed(2); }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  function setSaveStatus(text) {
+    const el = document.getElementById('save-status');
+    if (el) el.textContent = text;
+  }
+
+  function docRef() {
+    return doc(db, 'budgets', PASSCODE);
+  }
+
+  async function saveState() {
+    setSaveStatus('Saving…');
+    try {
+      await setDoc(docRef(), state);
+      setSaveStatus('Saved');
+      setTimeout(() => setSaveStatus(''), 1500);
+    } catch (err) {
+      console.error('Save failed:', err);
+      setSaveStatus('Save failed — check connection');
+    }
+  }
+
+  async function loadState() {
+    try {
+      const snap = await getDoc(docRef());
+      if (snap.exists()) {
+        const data = snap.data();
+        state = Object.assign(
+          { savingsBalance: 0, checkingBalance: 0, spending: { budget: 0, items: [] }, car: { budget: 0, items: [] } },
+          data
+        );
+      }
+    } catch (err) {
+      console.error('Load failed:', err);
+      showToast('Could not load saved data');
+    }
+  }
+
+  // ---------- Lock screen ----------
+  function tryUnlock() {
+    const input = document.getElementById('lock-input');
+    const errorEl = document.getElementById('lock-error');
+    if (input.value === PASSCODE) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      document.getElementById('lock-screen').classList.add('hidden');
+      document.getElementById('tracker-root').classList.remove('hidden');
+      boot();
+    } else {
+      errorEl.textContent = 'Incorrect passcode';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  document.getElementById('lock-submit').addEventListener('click', tryUnlock);
+  document.getElementById('lock-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+  if (sessionStorage.getItem(SESSION_KEY) === '1') {
+    document.getElementById('lock-screen').classList.add('hidden');
+    document.getElementById('tracker-root').classList.remove('hidden');
+    boot();
+  }
+
+  function lockOut() {
+    sessionStorage.removeItem(SESSION_KEY);
+    document.getElementById('tracker-root').classList.add('hidden');
+    document.getElementById('lock-screen').classList.remove('hidden');
+    document.getElementById('lock-input').value = '';
+    document.getElementById('lock-input').focus();
+  }
+
+  // ---------- App ----------
+  function buildUI() {
+    document.getElementById('app-content').innerHTML = `
+      <p class="section-label">Account balances</p>
+      <div class="account-grid">
+        <div class="account-card">
+          <p class="account-card-label"><span class="dot savings"></span> Savings</p>
+          <p class="account-balance" id="savings-display">$0.00</p>
+          <div class="account-input-row">
+            <span>$</span>
+            <input type="number" id="savings-bal-input" placeholder="Set balance" min="0" step="0.01" />
+            <button class="set-btn" id="savings-set-btn">Set</button>
+          </div>
+        </div>
+        <div class="account-card">
+          <p class="account-card-label"><span class="dot checking"></span> Checking</p>
+          <p class="account-balance" id="checking-display">$0.00</p>
+          <div class="account-input-row">
+            <span>$</span>
+            <input type="number" id="checking-bal-input" placeholder="Set balance" min="0" step="0.01" />
+            <button class="set-btn" id="checking-set-btn">Set</button>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <p class="section-label">New paycheck</p>
+      <div class="paycheck-row">
+        <span>$</span>
+        <input type="number" id="paycheck" min="0" step="0.01" placeholder="0.00" />
+        <button class="apply-btn" id="apply-btn">Apply paycheck</button>
+      </div>
+      <div class="split-preview">
+        <div class="preview-pill">Savings +<strong id="prev-savings">$0.00</strong></div>
+        <div class="preview-pill">Checking +<strong id="prev-checking">$0.00</strong></div>
+        <div class="preview-pill">New spending budget <strong id="prev-spending">$0.00</strong></div>
+        <div class="preview-pill">New car budget <strong id="prev-car">$0.00</strong></div>
+      </div>
+
+      <hr class="divider" />
+
+      <p class="section-label">Spending budget this period</p>
+      <div class="category-cards">
+        <div class="cat-card">
+          <div class="cat-header">
+            <span class="cat-title">🛍️ Spending</span>
+            <span class="cat-budget" id="spending-budget">of $0.00</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill spending" id="spending-bar" style="width:0%"></div></div>
+          <p class="cat-remaining" id="spending-remaining">$0.00 left</p>
+          <div class="log-expense">
+            <input type="number" id="spending-input" placeholder="Amount" min="0" step="0.01" />
+            <button class="log-btn" id="spending-add-btn">Add</button>
+          </div>
+          <div class="history" id="spending-history"></div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-header">
+            <span class="cat-title">🚗 Car</span>
+            <span class="cat-budget" id="car-budget">of $0.00</span>
+          </div>
+          <div class="progress-bg"><div class="progress-fill car" id="car-bar" style="width:0%"></div></div>
+          <p class="cat-remaining" id="car-remaining">$0.00 left</p>
+          <div class="log-expense">
+            <input type="number" id="car-input" placeholder="Amount" min="0" step="0.01" />
+            <button class="log-btn" id="car-add-btn">Add</button>
+          </div>
+          <div class="history" id="car-history"></div>
+        </div>
+      </div>
+
+      <div class="reset-row">
+        <button class="lock-out-btn" id="lock-out-btn">🔒 Lock</button>
+        <button class="reset-btn" id="reset-btn">↻ New pay period</button>
+      </div>
+    `;
+
+    document.getElementById('savings-set-btn').addEventListener('click', () => setBalance('savings'));
+    document.getElementById('checking-set-btn').addEventListener('click', () => setBalance('checking'));
+    document.getElementById('apply-btn').addEventListener('click', applyPaycheck);
+    document.getElementById('spending-add-btn').addEventListener('click', () => logExpense('spending'));
+    document.getElementById('car-add-btn').addEventListener('click', () => logExpense('car'));
+    document.getElementById('reset-btn').addEventListener('click', resetPeriod);
+    document.getElementById('lock-out-btn').addEventListener('click', lockOut);
+
+    document.getElementById('paycheck').addEventListener('input', updatePreview);
+    document.getElementById('savings-bal-input').addEventListener('keydown', e => { if (e.key === 'Enter') setBalance('savings'); });
+    document.getElementById('checking-bal-input').addEventListener('keydown', e => { if (e.key === 'Enter') setBalance('checking'); });
+    document.getElementById('spending-input').addEventListener('keydown', e => { if (e.key === 'Enter') logExpense('spending'); });
+    document.getElementById('car-input').addEventListener('keydown', e => { if (e.key === 'Enter') logExpense('car'); });
+  }
+
+  function renderAll() {
+    renderBalances();
+    updatePreview();
+    renderCategory('spending', state.spending.budget);
+    renderCategory('car', state.car.budget);
+  }
+
+  function renderBalances() {
+    document.getElementById('savings-display').textContent = fmt(state.savingsBalance);
+    document.getElementById('checking-display').textContent = fmt(state.checkingBalance);
+  }
+
+  function setBalance(type) {
+    const input = document.getElementById(type + '-bal-input');
+    const val = parseFloat(input.value);
+    if (isNaN(val) || val < 0) return;
+    state[type + 'Balance'] = val;
+    input.value = '';
+    renderBalances();
+
+    if (type === 'checking') {
+      state.spending.budget = state.checkingBalance * 0.5;
+      state.car.budget = state.checkingBalance * 0.5;
+      state.spending.items = [];
+      state.car.items = [];
+      renderCategory('spending', state.spending.budget);
+      renderCategory('car', state.car.budget);
+    }
+
+    saveState();
+    showToast(type.charAt(0).toUpperCase() + type.slice(1) + ' balance saved');
+  }
+
+  function updatePreview() {
+    const p = parseFloat(document.getElementById('paycheck').value) || 0;
+    const newChecking = state.checkingBalance + p * 0.5;
+    document.getElementById('prev-savings').textContent = fmt(p * 0.5);
+    document.getElementById('prev-checking').textContent = fmt(p * 0.5);
+    document.getElementById('prev-spending').textContent = fmt(newChecking * 0.5);
+    document.getElementById('prev-car').textContent = fmt(newChecking * 0.5);
+  }
+
+  function applyPaycheck() {
+    const p = parseFloat(document.getElementById('paycheck').value) || 0;
+    if (p <= 0) return;
+
+    state.savingsBalance += p * 0.5;
+    state.checkingBalance += p * 0.5;
+    state.spending.budget = state.checkingBalance * 0.5;
+    state.car.budget = state.checkingBalance * 0.5;
+    state.spending.items = [];
+    state.car.items = [];
+
+    document.getElementById('paycheck').value = '';
+    updatePreview();
+    renderBalances();
+    renderCategory('spending', state.spending.budget);
+    renderCategory('car', state.car.budget);
+    saveState();
+    showToast('Paycheck applied!');
+  }
+
+  function renderCategory(cat, budget) {
+    const items = state[cat].items;
+    const spent = items.reduce((s, i) => s + i.amount, 0);
+    const remaining = budget - spent;
+    const pct = budget > 0 ? Math.min((spent / budget) * 100, 100) : 0;
+    const over = remaining < 0;
+
+    document.getElementById(cat + '-budget').textContent = 'of ' + fmt(budget);
+    const bar = document.getElementById(cat + '-bar');
+    bar.style.width = pct.toFixed(1) + '%';
+    if (over) bar.classList.add('over'); else bar.classList.remove('over');
+
+    const remEl = document.getElementById(cat + '-remaining');
+    if (over) {
+      remEl.textContent = fmt(remaining) + ' over budget';
+      remEl.classList.add('over');
+    } else {
+      remEl.textContent = fmt(remaining) + ' left';
+      remEl.classList.remove('over');
+    }
+
+    const histEl = document.getElementById(cat + '-history');
+    if (items.length === 0) {
+      histEl.innerHTML = '<p class="empty-state">No expenses logged yet.</p>';
+      return;
+    }
+    histEl.innerHTML = items.slice().reverse().map((item, i) => {
+      const realIdx = items.length - 1 - i;
+      return `<div class="history-item">
+        <strong>${fmt(item.amount)}</strong>
+        <button class="del-btn" data-cat="${cat}" data-idx="${realIdx}" aria-label="Remove expense">&times;</button>
+      </div>`;
+    }).join('');
+
+    histEl.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteItem(btn.dataset.cat, parseInt(btn.dataset.idx, 10)));
+    });
+  }
+
+  function logExpense(cat) {
+    const input = document.getElementById(cat + '-input');
+    const val = parseFloat(input.value);
+    if (!val || val <= 0) return;
+    state[cat].items.push({ amount: val });
+    state.checkingBalance -= val;
+    input.value = '';
+    renderCategory(cat, state[cat].budget);
+    renderBalances();
+    saveState();
+  }
+
+  function deleteItem(cat, idx) {
+    const removed = state[cat].items[idx];
+    if (!removed) return;
+    state.checkingBalance += removed.amount;
+    state[cat].items.splice(idx, 1);
+    renderCategory(cat, state[cat].budget);
+    renderBalances();
+    saveState();
+  }
+
+  function resetPeriod() {
+    state.spending.items = [];
+    state.car.items = [];
+    state.spending.budget = 0;
+    state.car.budget = 0;
+    document.getElementById('paycheck').value = '';
+    updatePreview();
+    renderCategory('spending', 0);
+    renderCategory('car', 0);
+    saveState();
+    showToast('Ready for next pay period');
+  }
+
+  async function boot() {
+    await loadState();
+    buildUI();
+    renderAll();
+  }
+</script>
+</body>
+</html>
