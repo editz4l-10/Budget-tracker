@@ -13,10 +13,14 @@
     --text: #2b2723;
     --text-soft: #8a8378;
     --text-faint: #b5afa3;
-    --accent-spending: #5DAA8B;
-    --accent-car: #6B6FCB;
     --accent-over: #C2453F;
-    --accent-savings: #C99B4A;
+    --accent-ok: #5DAA8B;
+    --palette-0: #5DAA8B;
+    --palette-1: #6B6FCB;
+    --palette-2: #C99B4A;
+    --palette-3: #C2706B;
+    --palette-4: #5B8FB0;
+    --palette-5: #8A7BC4;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -27,135 +31,116 @@
     min-height: 100vh;
   }
 
-  /* Lock screen */
-  .lock-screen {
-    min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-direction: column;
-    padding: 1.5rem;
-  }
-  .lock-card {
-    background: var(--card); border: 1px solid var(--border-light); border-radius: 16px;
-    padding: 2rem 1.75rem; max-width: 320px; width: 100%; text-align: center;
-  }
+  .lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+  .lock-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem 1.75rem; max-width: 320px; width: 100%; text-align: center; }
   .lock-title { font-size: 16px; font-weight: 600; margin: 0 0 1.25rem; }
-  .lock-input {
-    width: 100%; font-size: 20px; text-align: center; letter-spacing: 0.15em;
-    padding: 12px 10px; border: 1px solid var(--border); border-radius: 10px;
-    background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px;
-  }
+  .lock-input { width: 100%; font-size: 20px; text-align: center; letter-spacing: 0.15em; padding: 12px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px; }
   .lock-input:focus { border-color: var(--text-soft); }
-  .lock-btn {
-    width: 100%; font-size: 14px; padding: 11px; border: none; border-radius: 10px;
-    background: var(--text); color: var(--card); cursor: pointer; font-weight: 500;
-  }
+  .lock-btn { width: 100%; font-size: 14px; padding: 11px; border: none; border-radius: 10px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
   .lock-btn:hover { opacity: 0.85; }
   .lock-error { font-size: 12.5px; color: var(--accent-over); margin: 10px 0 0; min-height: 16px; }
   .lock-hint { font-size: 12px; color: var(--text-faint); margin: 6px 0 0; }
 
-  .tracker { max-width: 480px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
+  .tracker { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
   .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
   .title { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  .top-actions { display: flex; align-items: center; gap: 12px; }
   .save-status { font-size: 11px; color: var(--text-faint); }
+  .icon-btn { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 0; }
+  .icon-btn:hover { color: var(--text); }
   .section-label { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.07em; margin: 0 0 8px; font-weight: 600; }
-  .account-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.75rem; }
-  .account-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; }
+
+  .account-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .account-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
   .account-card-label { font-size: 12px; color: var(--text-soft); margin: 0 0 6px; display: flex; align-items: center; gap: 5px; font-weight: 500; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-  .dot.savings { background: var(--accent-savings); }
-  .dot.checking { background: var(--text-soft); }
-  .account-balance { font-size: 24px; font-weight: 600; color: var(--text); margin: 0 0 10px; letter-spacing: -0.01em; }
-  .account-input-row { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .account-balance { font-size: 24px; font-weight: 600; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+  .account-pct { font-size: 11px; color: var(--text-faint); }
+  .account-input-row { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
   .account-input-row span { font-size: 13px; color: var(--text-faint); }
-  .account-input-row input {
-    flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px;
-    border: 1px solid var(--border); border-radius: 8px;
-    background: var(--bg); color: var(--text); outline: none;
-  }
+  .account-input-row input { flex: 1; min-width: 0; font-size: 13px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
   .account-input-row input:focus { border-color: var(--text-soft); }
-  .set-btn {
-    font-size: 12px; padding: 6px 11px; border: 1px solid var(--border);
-    border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap;
-  }
+  .set-btn { font-size: 12px; padding: 6px 11px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap; }
   .set-btn:hover { background: var(--border-light); }
   .set-btn:active { transform: scale(0.97); }
+
   .divider { border: none; border-top: 1px solid var(--border-light); margin: 1.75rem 0; }
   .paycheck-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.6rem; }
   .paycheck-row span { font-size: 22px; font-weight: 600; color: var(--text-faint); }
-  .paycheck-row input {
-    font-size: 26px; font-weight: 600; border: none; border-bottom: 2px solid var(--border);
-    background: transparent; color: var(--text); width: 150px; outline: none; padding: 4px 0;
-    letter-spacing: -0.01em;
-  }
+  .paycheck-row input { font-size: 26px; font-weight: 600; border: none; border-bottom: 2px solid var(--border); background: transparent; color: var(--text); width: 150px; outline: none; padding: 4px 0; letter-spacing: -0.01em; }
   .paycheck-row input:focus { border-bottom-color: var(--text); }
-  .apply-btn {
-    font-size: 13px; padding: 9px 16px; border: none; border-radius: 9px;
-    background: var(--text); color: var(--card); cursor: pointer; font-weight: 500;
-  }
+  .apply-btn { font-size: 13px; padding: 9px 16px; border: none; border-radius: 9px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
   .apply-btn:hover { opacity: 0.85; }
   .apply-btn:active { transform: scale(0.97); }
+  .apply-btn:disabled { opacity: 0.4; cursor: not-allowed; }
   .split-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.75rem; }
-  .preview-pill {
-    background: var(--card); border: 1px solid var(--border-light); border-radius: 10px;
-    padding: 9px 12px; font-size: 12.5px; color: var(--text-soft); display: flex; justify-content: space-between; align-items: center;
-  }
+  .preview-pill { background: var(--card); border: 1px solid var(--border-light); border-radius: 10px; padding: 9px 12px; font-size: 12.5px; color: var(--text-soft); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .preview-pill strong { color: var(--text); font-weight: 600; }
-  .category-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .cat-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; }
-  .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .cat-title { font-size: 13.5px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
-  .cat-budget { font-size: 11.5px; color: var(--text-faint); }
-  .progress-bg { background: var(--border-light); border-radius: 99px; height: 6px; margin-bottom: 10px; overflow: hidden; }
+
+  .cat-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 12px; padding: 12px 14px; margin-top: 10px; }
+  .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .cat-title { font-size: 13px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 6px; }
+  .cat-budget { font-size: 11px; color: var(--text-faint); }
+  .progress-bg { background: var(--border-light); border-radius: 99px; height: 6px; margin-bottom: 8px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
-  .progress-fill.spending { background: var(--accent-spending); }
-  .progress-fill.car { background: var(--accent-car); }
-  .progress-fill.over { background: var(--accent-over); }
-  .cat-remaining { font-size: 19px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .progress-fill.over { background: var(--accent-over) !important; }
+  .cat-remaining { font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
   .cat-remaining.over { color: var(--accent-over); }
-  .log-expense { display: flex; gap: 6px; margin-top: 6px; }
-  .log-expense input {
-    flex: 1; min-width: 0; font-size: 13px; padding: 7px 8px; border: 1px solid var(--border);
-    border-radius: 8px; background: var(--bg); color: var(--text); outline: none;
-  }
+  .log-expense { display: flex; gap: 6px; margin-top: 4px; }
+  .log-expense input { flex: 1; min-width: 0; font-size: 13px; padding: 7px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
   .log-expense input:focus { border-color: var(--text-soft); }
-  .log-btn {
-    font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px;
-    background: transparent; color: var(--text); cursor: pointer; white-space: nowrap;
-  }
+  .log-btn { font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap; }
   .log-btn:hover { background: var(--border-light); }
-  .log-btn:active { transform: scale(0.97); }
-  .history { margin-top: 4px; max-height: 140px; overflow-y: auto; }
-  .history-item {
-    display: flex; justify-content: space-between; align-items: center; padding: 5px 0;
-    border-bottom: 1px solid var(--border-light); font-size: 13px;
-  }
+  .history { margin-top: 4px; max-height: 120px; overflow-y: auto; }
+  .history-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; }
   .history-item:last-child { border-bottom: none; }
   .history-item strong { color: var(--text); font-weight: 600; }
   .del-btn { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 15px; padding: 0 2px; line-height: 1; }
   .del-btn:hover { color: var(--accent-over); }
-  .reset-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
-  .reset-btn {
-    font-size: 12px; color: var(--text-soft); background: none; border: none;
-    cursor: pointer; padding: 0; display: flex; align-items: center; gap: 4px;
-  }
-  .reset-btn:hover { color: var(--text); }
-  .lock-out-btn { font-size: 12px; color: var(--text-faint); background: none; border: none; cursor: pointer; padding: 0; }
-  .lock-out-btn:hover { color: var(--text); }
   .empty-state { font-size: 12px; color: var(--text-faint); padding: 4px 0; }
-  .toast {
-    position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(8px);
-    background: var(--text); color: var(--card); border-radius: 10px; padding: 9px 16px;
-    font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none;
-    white-space: nowrap; z-index: 10;
-  }
+
+  .reset-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+  .reset-btn { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 4px; }
+  .reset-btn:hover { color: var(--text); }
+
+  .toast { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--text); color: var(--card); border-radius: 10px; padding: 9px 16px; font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; white-space: nowrap; z-index: 20; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   .loading-state { text-align: center; padding: 3rem 0; color: var(--text-faint); font-size: 13px; }
   .hidden { display: none !important; }
+
+  /* Setup / edit view */
+  .setup-overlay { position: fixed; inset: 0; background: var(--bg); overflow-y: auto; z-index: 30; }
+  .setup-inner { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
+  .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .setup-title { font-size: 17px; font-weight: 600; margin: 0; }
+  .setup-done-btn { font-size: 13px; padding: 8px 14px; border: none; border-radius: 9px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
+  .setup-done-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .setup-account { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 14px; }
+  .setup-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .setup-row input[type="text"] { flex: 1; min-width: 0; font-size: 14px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; font-weight: 500; }
+  .setup-row input[type="number"] { width: 70px; font-size: 14px; padding: 8px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; text-align: right; }
+  .setup-row input:focus { border-color: var(--text-soft); }
+  .setup-pct-suffix { font-size: 13px; color: var(--text-faint); margin-left: -4px; }
+  .remove-btn { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 18px; padding: 4px 6px; line-height: 1; }
+  .remove-btn:hover { color: var(--accent-over); }
+  .setup-categories { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+  .setup-cat-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; padding-left: 4px; }
+  .setup-cat-row input[type="text"] { flex: 1; min-width: 0; font-size: 13px; padding: 7px 9px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
+  .setup-cat-row input[type="number"] { width: 60px; font-size: 13px; padding: 7px 7px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; text-align: right; }
+  .add-link-btn { font-size: 12.5px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 4px 0; font-weight: 500; }
+  .add-link-btn:hover { color: var(--text); }
+  .pct-total-row { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; margin-top: 4px; padding: 0 2px; }
+  .pct-total-row.bad { color: var(--accent-over); }
+  .pct-total-row.good { color: var(--accent-ok); }
+  .add-account-btn { width: 100%; font-size: 13px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: transparent; color: var(--text-soft); cursor: pointer; margin-bottom: 1.5rem; }
+  .add-account-btn:hover { background: var(--border-light); color: var(--text); }
+  .setup-error-banner { background: #FBEAEA; border: 1px solid #E6BFBE; color: var(--accent-over); font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-bottom: 1rem; }
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<!-- Lock screen -->
 <div class="lock-screen" id="lock-screen">
   <div class="lock-card">
     <p class="lock-title">Enter your 4-digit passcode</p>
@@ -166,18 +151,33 @@
   </div>
 </div>
 
-<!-- Main app -->
 <div class="tracker hidden" id="tracker-root">
   <div class="top-row">
     <p class="title">Budget tracker</p>
-    <span class="save-status" id="save-status"></span>
+    <div class="top-actions">
+      <span class="save-status" id="save-status"></span>
+      <button class="icon-btn" id="edit-setup-btn">⚙ Edit accounts</button>
+      <button class="icon-btn" id="lock-out-btn">🔒</button>
+    </div>
   </div>
   <div id="app-content">
     <div class="loading-state">Loading your data&hellip;</div>
   </div>
 </div>
 
-<!-- Firebase (browser module build, no npm/build step needed) -->
+<!-- Setup / edit overlay -->
+<div class="setup-overlay hidden" id="setup-overlay">
+  <div class="setup-inner">
+    <div class="setup-header">
+      <p class="setup-title">Accounts & categories</p>
+      <button class="setup-done-btn" id="setup-done-btn">Done</button>
+    </div>
+    <div id="setup-error-area"></div>
+    <div id="setup-accounts-list"></div>
+    <button class="add-account-btn" id="add-account-btn">+ Add account</button>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
@@ -198,14 +198,20 @@
   const SESSION_KEY = 'budget-tracker-passcode';
   let PASSCODE = null;
 
-  let state = {
-    savingsBalance: 0,
-    checkingBalance: 0,
-    spending: { budget: 0, items: [] },
-    car: { budget: 0, items: [] }
-  };
+  const PALETTE = ['palette-0', 'palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5'];
 
-  function fmt(n) { return '$' + Math.abs(n).toFixed(2); }
+  function defaultState() {
+    return { accounts: [] };
+  }
+
+  let state = defaultState();
+
+  function uid() { return Math.random().toString(36).slice(2, 9); }
+  function fmt(n) {
+    const rounded = Math.round((Math.abs(n) + Number.EPSILON) * 100) / 100;
+    return '$' + rounded.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function sumPct(list) { return list.reduce((s, x) => s + (parseFloat(x.splitPct) || 0), 0); }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
@@ -219,9 +225,7 @@
     if (el) el.textContent = text;
   }
 
-  function docRef() {
-    return doc(db, 'budgets', PASSCODE);
-  }
+  function docRef() { return doc(db, 'budgets', PASSCODE); }
 
   async function saveState() {
     setSaveStatus('Saving…');
@@ -238,16 +242,15 @@
   async function loadState() {
     try {
       const snap = await getDoc(docRef());
-      if (snap.exists()) {
-        const data = snap.data();
-        state = Object.assign(
-          { savingsBalance: 0, checkingBalance: 0, spending: { budget: 0, items: [] }, car: { budget: 0, items: [] } },
-          data
-        );
+      if (snap.exists() && snap.data() && Array.isArray(snap.data().accounts) && snap.data().accounts.length > 0) {
+        state = snap.data();
+      } else {
+        state = defaultState();
       }
     } catch (err) {
       console.error('Load failed:', err);
       showToast('Could not load saved data');
+      state = defaultState();
     }
   }
 
@@ -280,248 +283,383 @@
     boot();
   }
 
-  function lockOut() {
+  document.getElementById('lock-out-btn').addEventListener('click', () => {
     sessionStorage.removeItem(SESSION_KEY);
     PASSCODE = null;
     document.getElementById('tracker-root').classList.add('hidden');
     document.getElementById('lock-screen').classList.remove('hidden');
     document.getElementById('lock-input').value = '';
     document.getElementById('lock-input').focus();
-  }
+  });
 
-  // ---------- App ----------
-  function buildUI() {
-    document.getElementById('app-content').innerHTML = `
-      <p class="section-label">Account balances</p>
-      <div class="account-grid">
-        <div class="account-card">
-          <p class="account-card-label"><span class="dot savings"></span> Savings</p>
-          <p class="account-balance" id="savings-display">$0.00</p>
-          <div class="account-input-row">
-            <span>$</span>
-            <input type="number" id="savings-bal-input" placeholder="Set balance" min="0" step="0.01" />
-            <button class="set-btn" id="savings-set-btn">Set</button>
+  // ---------- Main app render ----------
+  function renderApp() {
+    const root = document.getElementById('app-content');
+    root.innerHTML = '';
+
+    // Accounts
+    const accSection = document.createElement('div');
+    accSection.innerHTML = '<p class="section-label">Accounts</p>';
+    state.accounts.forEach((acc, i) => {
+      const card = document.createElement('div');
+      card.className = 'account-card';
+      const colorClass = PALETTE[i % PALETTE.length];
+      card.innerHTML = `
+        <div class="account-card-top">
+          <div>
+            <p class="account-card-label"><span class="dot" style="background:var(--${colorClass})"></span> ${escapeHtml(acc.name)}</p>
+            <p class="account-balance">${fmt(acc.balance)}</p>
           </div>
+          <span class="account-pct">${acc.splitPct}% of paycheck</span>
         </div>
-        <div class="account-card">
-          <p class="account-card-label"><span class="dot checking"></span> Checking</p>
-          <p class="account-balance" id="checking-display">$0.00</p>
-          <div class="account-input-row">
-            <span>$</span>
-            <input type="number" id="checking-bal-input" placeholder="Set balance" min="0" step="0.01" />
-            <button class="set-btn" id="checking-set-btn">Set</button>
-          </div>
+        <div class="account-input-row">
+          <span>$</span>
+          <input type="number" min="0" step="0.01" placeholder="Set balance" data-acc="${acc.id}" class="bal-input" />
+          <button class="set-btn" data-acc="${acc.id}">Set</button>
         </div>
-      </div>
+        <div class="cat-container" data-acc="${acc.id}"></div>
+      `;
+      accSection.appendChild(card);
 
-      <hr class="divider" />
+      const setBtn = card.querySelector('.account-input-row button');
+      setBtn.addEventListener('click', () => setAccountBalance(acc.id));
+      const balInput = card.querySelector('.bal-input');
+      balInput.addEventListener('keydown', e => { if (e.key === 'Enter') setAccountBalance(acc.id); });
 
+      const catContainer = card.querySelector('.cat-container');
+      acc.categories.forEach(cat => {
+        catContainer.appendChild(buildCategoryCard(acc, cat));
+      });
+    });
+    root.appendChild(accSection);
+
+    // Paycheck
+    const divider1 = document.createElement('hr');
+    divider1.className = 'divider';
+    root.appendChild(divider1);
+
+    const paySection = document.createElement('div');
+    paySection.innerHTML = `
       <p class="section-label">New paycheck</p>
       <div class="paycheck-row">
         <span>$</span>
-        <input type="number" id="paycheck" min="0" step="0.01" placeholder="0.00" />
-        <button class="apply-btn" id="apply-btn">Apply paycheck</button>
+        <input type="number" min="0" step="0.01" placeholder="0.00" id="paycheck-input" />
+        <button class="apply-btn" id="apply-paycheck-btn">Apply paycheck</button>
       </div>
-      <div class="split-preview">
-        <div class="preview-pill">Savings +<strong id="prev-savings">$0.00</strong></div>
-        <div class="preview-pill">Checking +<strong id="prev-checking">$0.00</strong></div>
-        <div class="preview-pill">New spending budget <strong id="prev-spending">$0.00</strong></div>
-        <div class="preview-pill">New car budget <strong id="prev-car">$0.00</strong></div>
+      <div class="split-preview" id="split-preview-area"></div>
+    `;
+    root.appendChild(paySection);
+
+    document.getElementById('paycheck-input').addEventListener('input', updatePaycheckPreview);
+    document.getElementById('paycheck-input').addEventListener('keydown', e => { if (e.key === 'Enter') applyPaycheck(); });
+    document.getElementById('apply-paycheck-btn').addEventListener('click', applyPaycheck);
+    updatePaycheckPreview();
+
+    const divider2 = document.createElement('hr');
+    divider2.className = 'divider';
+    root.appendChild(divider2);
+
+    const resetRow = document.createElement('div');
+    resetRow.className = 'reset-row';
+    resetRow.innerHTML = `<span></span><button class="reset-btn" id="reset-period-btn">↻ New pay period</button>`;
+    root.appendChild(resetRow);
+    document.getElementById('reset-period-btn').addEventListener('click', resetPeriod);
+  }
+
+  function buildCategoryCard(acc, cat) {
+    const wrap = document.createElement('div');
+    wrap.className = 'cat-card';
+    const spent = cat.items.reduce((s, it) => s + it.amount, 0);
+    const remaining = cat.budget - spent;
+    const pct = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
+    const over = remaining < 0;
+
+    wrap.innerHTML = `
+      <div class="cat-header">
+        <span class="cat-title">${escapeHtml(cat.name)}</span>
+        <span class="cat-budget">of ${fmt(cat.budget)}</span>
       </div>
-
-      <hr class="divider" />
-
-      <p class="section-label">Spending budget this period</p>
-      <div class="category-cards">
-        <div class="cat-card">
-          <div class="cat-header">
-            <span class="cat-title">🛍️ Spending</span>
-            <span class="cat-budget" id="spending-budget">of $0.00</span>
-          </div>
-          <div class="progress-bg"><div class="progress-fill spending" id="spending-bar" style="width:0%"></div></div>
-          <p class="cat-remaining" id="spending-remaining">$0.00 left</p>
-          <div class="log-expense">
-            <input type="number" id="spending-input" placeholder="Amount" min="0" step="0.01" />
-            <button class="log-btn" id="spending-add-btn">Add</button>
-          </div>
-          <div class="history" id="spending-history"></div>
-        </div>
-        <div class="cat-card">
-          <div class="cat-header">
-            <span class="cat-title">🚗 Car</span>
-            <span class="cat-budget" id="car-budget">of $0.00</span>
-          </div>
-          <div class="progress-bg"><div class="progress-fill car" id="car-bar" style="width:0%"></div></div>
-          <p class="cat-remaining" id="car-remaining">$0.00 left</p>
-          <div class="log-expense">
-            <input type="number" id="car-input" placeholder="Amount" min="0" step="0.01" />
-            <button class="log-btn" id="car-add-btn">Add</button>
-          </div>
-          <div class="history" id="car-history"></div>
-        </div>
+      <div class="progress-bg"><div class="progress-fill ${over ? 'over' : ''}" style="width:${pct.toFixed(1)}%;${over ? '' : 'background:var(--accent-ok)'}"></div></div>
+      <p class="cat-remaining ${over ? 'over' : ''}">${over ? fmt(remaining) + ' over budget' : fmt(remaining) + ' left'}</p>
+      <div class="log-expense">
+        <input type="number" min="0" step="0.01" placeholder="Amount" class="cat-expense-input" />
+        <button class="log-btn">Add</button>
       </div>
-
-      <div class="reset-row">
-        <button class="lock-out-btn" id="lock-out-btn">🔒 Lock</button>
-        <button class="reset-btn" id="reset-btn">↻ New pay period</button>
+      <div class="history">
+        ${cat.items.length === 0 ? '<p class="empty-state">No expenses logged yet.</p>' :
+          cat.items.slice().reverse().map((item, i) => {
+            const realIdx = cat.items.length - 1 - i;
+            return `<div class="history-item"><strong>${fmt(item.amount)}</strong><button class="del-btn" data-idx="${realIdx}" aria-label="Remove expense">&times;</button></div>`;
+          }).join('')}
       </div>
     `;
 
-    document.getElementById('savings-set-btn').addEventListener('click', () => setBalance('savings'));
-    document.getElementById('checking-set-btn').addEventListener('click', () => setBalance('checking'));
-    document.getElementById('apply-btn').addEventListener('click', applyPaycheck);
-    document.getElementById('spending-add-btn').addEventListener('click', () => logExpense('spending'));
-    document.getElementById('car-add-btn').addEventListener('click', () => logExpense('car'));
-    document.getElementById('reset-btn').addEventListener('click', resetPeriod);
-    document.getElementById('lock-out-btn').addEventListener('click', lockOut);
+    const input = wrap.querySelector('.cat-expense-input');
+    const logBtn = wrap.querySelector('.log-btn');
+    const doLog = () => logExpense(acc.id, cat.id, input);
+    logBtn.addEventListener('click', doLog);
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') doLog(); });
 
-    document.getElementById('paycheck').addEventListener('input', updatePreview);
-    document.getElementById('savings-bal-input').addEventListener('keydown', e => { if (e.key === 'Enter') setBalance('savings'); });
-    document.getElementById('checking-bal-input').addEventListener('keydown', e => { if (e.key === 'Enter') setBalance('checking'); });
-    document.getElementById('spending-input').addEventListener('keydown', e => { if (e.key === 'Enter') logExpense('spending'); });
-    document.getElementById('car-input').addEventListener('keydown', e => { if (e.key === 'Enter') logExpense('car'); });
+    wrap.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteExpense(acc.id, cat.id, parseInt(btn.dataset.idx, 10)));
+    });
+
+    return wrap;
   }
 
-  function renderAll() {
-    renderBalances();
-    updatePreview();
-    renderCategory('spending', state.spending.budget);
-    renderCategory('car', state.car.budget);
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   }
 
-  function renderBalances() {
-    document.getElementById('savings-display').textContent = fmt(state.savingsBalance);
-    document.getElementById('checking-display').textContent = fmt(state.checkingBalance);
+  function updatePaycheckPreview() {
+    const p = parseFloat(document.getElementById('paycheck-input').value) || 0;
+    const area = document.getElementById('split-preview-area');
+    area.innerHTML = state.accounts.map(acc => {
+      const addedAmt = p * (acc.splitPct / 100);
+      return `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(addedAmt)}</strong></div>`;
+    }).join('');
   }
 
-  function setBalance(type) {
-    const input = document.getElementById(type + '-bal-input');
+  function setAccountBalance(accId) {
+    const input = document.querySelector(`.bal-input[data-acc="${accId}"]`);
     const val = parseFloat(input.value);
     if (isNaN(val) || val < 0) return;
-    state[type + 'Balance'] = val;
+    const acc = state.accounts.find(a => a.id === accId);
+    acc.balance = val;
+    recalcCategoriesForAccount(acc);
     input.value = '';
-    renderBalances();
-
-    if (type === 'checking') {
-      state.spending.budget = state.checkingBalance * 0.5;
-      state.car.budget = state.checkingBalance * 0.5;
-      state.spending.items = [];
-      state.car.items = [];
-      renderCategory('spending', state.spending.budget);
-      renderCategory('car', state.car.budget);
-    }
-
+    renderApp();
     saveState();
-    showToast(type.charAt(0).toUpperCase() + type.slice(1) + ' balance saved');
+    showToast(acc.name + ' balance saved');
   }
 
-  function updatePreview() {
-    const p = parseFloat(document.getElementById('paycheck').value) || 0;
-    const newChecking = state.checkingBalance + p * 0.5;
-    document.getElementById('prev-savings').textContent = fmt(p * 0.5);
-    document.getElementById('prev-checking').textContent = fmt(p * 0.5);
-    document.getElementById('prev-spending').textContent = fmt(newChecking * 0.5);
-    document.getElementById('prev-car').textContent = fmt(newChecking * 0.5);
+  function recalcCategoriesForAccount(acc) {
+    acc.categories.forEach(cat => {
+      cat.budget = acc.balance * (cat.splitPct / 100);
+      cat.items = [];
+    });
   }
 
   function applyPaycheck() {
-    const p = parseFloat(document.getElementById('paycheck').value) || 0;
+    const p = parseFloat(document.getElementById('paycheck-input').value) || 0;
     if (p <= 0) return;
-
-    state.savingsBalance += p * 0.5;
-    state.checkingBalance += p * 0.5;
-    state.spending.budget = state.checkingBalance * 0.5;
-    state.car.budget = state.checkingBalance * 0.5;
-    state.spending.items = [];
-    state.car.items = [];
-
-    document.getElementById('paycheck').value = '';
-    updatePreview();
-    renderBalances();
-    renderCategory('spending', state.spending.budget);
-    renderCategory('car', state.car.budget);
+    state.accounts.forEach(acc => {
+      acc.balance += p * (acc.splitPct / 100);
+      recalcCategoriesForAccount(acc);
+    });
+    document.getElementById('paycheck-input').value = '';
+    renderApp();
     saveState();
     showToast('Paycheck applied!');
   }
 
-  function renderCategory(cat, budget) {
-    const items = state[cat].items;
-    const spent = items.reduce((s, i) => s + i.amount, 0);
-    const remaining = budget - spent;
-    const pct = budget > 0 ? Math.min((spent / budget) * 100, 100) : 0;
-    const over = remaining < 0;
-
-    document.getElementById(cat + '-budget').textContent = 'of ' + fmt(budget);
-    const bar = document.getElementById(cat + '-bar');
-    bar.style.width = pct.toFixed(1) + '%';
-    if (over) bar.classList.add('over'); else bar.classList.remove('over');
-
-    const remEl = document.getElementById(cat + '-remaining');
-    if (over) {
-      remEl.textContent = fmt(remaining) + ' over budget';
-      remEl.classList.add('over');
-    } else {
-      remEl.textContent = fmt(remaining) + ' left';
-      remEl.classList.remove('over');
-    }
-
-    const histEl = document.getElementById(cat + '-history');
-    if (items.length === 0) {
-      histEl.innerHTML = '<p class="empty-state">No expenses logged yet.</p>';
-      return;
-    }
-    histEl.innerHTML = items.slice().reverse().map((item, i) => {
-      const realIdx = items.length - 1 - i;
-      return `<div class="history-item">
-        <strong>${fmt(item.amount)}</strong>
-        <button class="del-btn" data-cat="${cat}" data-idx="${realIdx}" aria-label="Remove expense">&times;</button>
-      </div>`;
-    }).join('');
-
-    histEl.querySelectorAll('.del-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteItem(btn.dataset.cat, parseInt(btn.dataset.idx, 10)));
-    });
-  }
-
-  function logExpense(cat) {
-    const input = document.getElementById(cat + '-input');
+  function logExpense(accId, catId, input) {
     const val = parseFloat(input.value);
     if (!val || val <= 0) return;
-    state[cat].items.push({ amount: val });
-    state.checkingBalance -= val;
-    input.value = '';
-    renderCategory(cat, state[cat].budget);
-    renderBalances();
+    const acc = state.accounts.find(a => a.id === accId);
+    const cat = acc.categories.find(c => c.id === catId);
+    cat.items.push({ amount: val });
+    acc.balance -= val;
+    renderApp();
     saveState();
   }
 
-  function deleteItem(cat, idx) {
-    const removed = state[cat].items[idx];
+  function deleteExpense(accId, catId, idx) {
+    const acc = state.accounts.find(a => a.id === accId);
+    const cat = acc.categories.find(c => c.id === catId);
+    const removed = cat.items[idx];
     if (!removed) return;
-    state.checkingBalance += removed.amount;
-    state[cat].items.splice(idx, 1);
-    renderCategory(cat, state[cat].budget);
-    renderBalances();
+    acc.balance += removed.amount;
+    cat.items.splice(idx, 1);
+    renderApp();
     saveState();
   }
 
   function resetPeriod() {
-    state.spending.items = [];
-    state.car.items = [];
-    state.spending.budget = 0;
-    state.car.budget = 0;
-    document.getElementById('paycheck').value = '';
-    updatePreview();
-    renderCategory('spending', 0);
-    renderCategory('car', 0);
+    state.accounts.forEach(acc => {
+      acc.categories.forEach(cat => {
+        cat.items = [];
+        cat.budget = 0;
+      });
+    });
+    renderApp();
     saveState();
     showToast('Ready for next pay period');
   }
 
+  // ---------- Setup / edit overlay ----------
+  let setupDraft = null; // working copy while editing
+
+  document.getElementById('edit-setup-btn').addEventListener('click', openSetup);
+  document.getElementById('setup-done-btn').addEventListener('click', closeSetup);
+  document.getElementById('add-account-btn').addEventListener('click', () => {
+    setupDraft.accounts.push({ id: uid(), name: 'New account', balance: 0, splitPct: 0, categories: [] });
+    renderSetup();
+  });
+
+  function openSetup() {
+    setupDraft = JSON.parse(JSON.stringify(state));
+    document.getElementById('setup-overlay').classList.remove('hidden');
+    renderSetup();
+  }
+
+  function validateDraft() {
+    const errors = [];
+    if (setupDraft.accounts.length === 0) errors.push('Add at least one account.');
+    const accTotal = sumPct(setupDraft.accounts);
+    if (setupDraft.accounts.length > 0 && Math.round(accTotal) !== 100) {
+      errors.push(`Account percentages add up to ${accTotal}%, not 100%.`);
+    }
+    setupDraft.accounts.forEach(acc => {
+      if (!acc.name.trim()) errors.push('Every account needs a name.');
+      if (acc.categories.length > 0) {
+        const catTotal = sumPct(acc.categories);
+        if (Math.round(catTotal) !== 100) {
+          errors.push(`"${acc.name || 'Unnamed'}" categories add up to ${catTotal}%, not 100%.`);
+        }
+        acc.categories.forEach(cat => {
+          if (!cat.name.trim()) errors.push(`A category in "${acc.name || 'Unnamed'}" needs a name.`);
+        });
+      }
+    });
+    return errors;
+  }
+
+  function renderSetup() {
+    const errors = validateDraft();
+    const errorArea = document.getElementById('setup-error-area');
+    errorArea.innerHTML = errors.length
+      ? `<div class="setup-error-banner">${errors.map(escapeHtml).join('<br>')}</div>`
+      : '';
+    document.getElementById('setup-done-btn').disabled = errors.length > 0;
+
+    const list = document.getElementById('setup-accounts-list');
+    list.innerHTML = '';
+
+    setupDraft.accounts.forEach((acc, accIdx) => {
+      const accTotal = sumPct(setupDraft.accounts);
+      const card = document.createElement('div');
+      card.className = 'setup-account';
+      card.innerHTML = `
+        <div class="setup-row">
+          <input type="text" value="${escapeHtml(acc.name)}" data-field="name" placeholder="Account name" />
+          <input type="number" min="0" max="100" step="1" value="${acc.splitPct}" data-field="splitPct" />
+          <span class="setup-pct-suffix">%</span>
+          <button class="remove-btn" data-action="remove-account" aria-label="Remove account">&times;</button>
+        </div>
+        <div class="setup-categories" data-acc-idx="${accIdx}"></div>
+        <button class="add-link-btn" data-action="add-category">+ Add category</button>
+      `;
+
+      card.querySelector('[data-field="name"]').addEventListener('input', e => {
+        acc.name = e.target.value;
+        refreshSetupValidation();
+      });
+      card.querySelector('[data-field="splitPct"]').addEventListener('input', e => {
+        acc.splitPct = parseFloat(e.target.value) || 0;
+        refreshSetupValidation();
+      });
+      card.querySelector('[data-action="remove-account"]').addEventListener('click', () => {
+        setupDraft.accounts.splice(accIdx, 1);
+        renderSetup();
+      });
+      card.querySelector('[data-action="add-category"]').addEventListener('click', () => {
+        acc.categories.push({ id: uid(), name: 'New category', splitPct: 0, items: [] });
+        renderSetup();
+      });
+
+      const catArea = card.querySelector('.setup-categories');
+      acc.categories.forEach((cat, catIdx) => {
+        const row = document.createElement('div');
+        row.className = 'setup-cat-row';
+        row.innerHTML = `
+          <input type="text" value="${escapeHtml(cat.name)}" placeholder="Category name" />
+          <input type="number" min="0" max="100" step="1" value="${cat.splitPct}" />
+          <span class="setup-pct-suffix">%</span>
+          <button class="remove-btn" aria-label="Remove category">&times;</button>
+        `;
+        const [nameInput, pctInput] = row.querySelectorAll('input');
+        nameInput.addEventListener('input', e => { cat.name = e.target.value; refreshSetupValidation(); });
+        pctInput.addEventListener('input', e => { cat.splitPct = parseFloat(e.target.value) || 0; refreshSetupValidation(); });
+        row.querySelector('.remove-btn').addEventListener('click', () => {
+          acc.categories.splice(catIdx, 1);
+          renderSetup();
+        });
+        catArea.appendChild(row);
+      });
+
+      if (acc.categories.length > 0) {
+        const catTotal = sumPct(acc.categories);
+        const totalRow = document.createElement('div');
+        totalRow.className = 'pct-total-row ' + (Math.round(catTotal) === 100 ? 'good' : 'bad');
+        totalRow.textContent = `Categories total: ${catTotal}%`;
+        totalRow.dataset.catTotalFor = acc.id;
+        catArea.appendChild(totalRow);
+      }
+
+      list.appendChild(card);
+      card.dataset.accountId = acc.id;
+
+      if (accIdx === setupDraft.accounts.length - 1) {
+        const totalRow = document.createElement('div');
+        totalRow.className = 'pct-total-row ' + (Math.round(accTotal) === 100 ? 'good' : 'bad');
+        totalRow.textContent = `Accounts total: ${accTotal}%`;
+        totalRow.id = 'accounts-total-row';
+        list.appendChild(totalRow);
+      }
+    });
+  }
+
+  function refreshSetupValidation() {
+    const errors = validateDraft();
+    const errorArea = document.getElementById('setup-error-area');
+    errorArea.innerHTML = errors.length
+      ? `<div class="setup-error-banner">${errors.map(escapeHtml).join('<br>')}</div>`
+      : '';
+    document.getElementById('setup-done-btn').disabled = errors.length > 0;
+
+    const accTotal = sumPct(setupDraft.accounts);
+    const accTotalRow = document.getElementById('accounts-total-row');
+    if (accTotalRow) {
+      accTotalRow.textContent = `Accounts total: ${accTotal}%`;
+      accTotalRow.className = 'pct-total-row ' + (Math.round(accTotal) === 100 ? 'good' : 'bad');
+    }
+
+    setupDraft.accounts.forEach(acc => {
+      if (acc.categories.length === 0) return;
+      const catTotal = sumPct(acc.categories);
+      const row = document.querySelector(`[data-cat-total-for="${acc.id}"]`);
+      if (row) {
+        row.textContent = `Categories total: ${catTotal}%`;
+        row.className = 'pct-total-row ' + (Math.round(catTotal) === 100 ? 'good' : 'bad');
+      }
+    });
+  }
+
+  function closeSetup() {
+    const errors = validateDraft();
+    if (errors.length > 0) return;
+    // Recalculate every category's budget from its (possibly new) splitPct against
+    // the account's current balance, but keep existing logged expenses intact.
+    setupDraft.accounts.forEach(acc => {
+      acc.categories.forEach(cat => {
+        cat.items = cat.items || [];
+        cat.budget = acc.balance * (cat.splitPct / 100);
+      });
+    });
+    state = setupDraft;
+    document.getElementById('setup-overlay').classList.add('hidden');
+    renderApp();
+    saveState();
+    showToast('Accounts updated');
+  }
+
   async function boot() {
     await loadState();
-    buildUI();
-    renderAll();
+    renderApp();
+    if (state.accounts.length === 0) {
+      openSetup();
+    }
   }
 </script>
 </body>
