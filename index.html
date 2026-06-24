@@ -14,6 +14,7 @@
     --text-soft: #8a8378;
     --text-faint: #b5afa3;
     --accent-over: #C2453F;
+    --accent-warn: #D6A23C;
     --accent-ok: #5DAA8B;
     --palette-0: #5DAA8B;
     --palette-1: #6B6FCB;
@@ -36,10 +37,14 @@
   .lock-title { font-size: 16px; font-weight: 600; margin: 0 0 1.25rem; }
   .lock-input { width: 100%; font-size: 20px; text-align: center; letter-spacing: 0.15em; padding: 12px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px; }
   .lock-input:focus { border-color: var(--text-soft); }
+  .lock-input.wide { font-size: 15px; text-align: left; letter-spacing: normal; }
   .lock-btn { width: 100%; font-size: 14px; padding: 11px; border: none; border-radius: 10px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
   .lock-btn:hover { opacity: 0.85; }
+  .lock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .lock-error { font-size: 12.5px; color: var(--accent-over); margin: 10px 0 0; min-height: 16px; }
   .lock-hint { font-size: 12px; color: var(--text-faint); margin: 6px 0 0; }
+  .link-btn { background: none; border: none; color: var(--text); font-weight: 600; cursor: pointer; padding: 0; font-size: 12px; text-decoration: underline; }
+  .link-btn:hover { opacity: 0.8; }
 
   .tracker { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
   .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
@@ -48,6 +53,8 @@
   .save-status { font-size: 11px; color: var(--text-faint); }
   .icon-btn { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 0; }
   .icon-btn:hover { color: var(--text); }
+  .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .icon-btn:disabled:hover { color: var(--text-soft); }
   .section-label { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.07em; margin: 0 0 8px; font-weight: 600; }
 
   .account-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
@@ -83,18 +90,33 @@
   .cat-budget { font-size: 11px; color: var(--text-faint); }
   .progress-bg { background: var(--border-light); border-radius: 99px; height: 6px; margin-bottom: 8px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
-  .progress-fill.over { background: var(--accent-over) !important; }
+  .progress-fill.tier-ok { background: var(--accent-ok); }
+  .progress-fill.tier-warn { background: var(--accent-warn); }
+  .progress-fill.tier-over { background: var(--accent-over); }
   .cat-remaining { font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
   .cat-remaining.over { color: var(--accent-over); }
-  .log-expense { display: flex; gap: 6px; margin-top: 4px; }
-  .log-expense input { flex: 1; min-width: 0; font-size: 13px; padding: 7px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
+  .cat-remaining.warn { color: var(--accent-warn); }
+  .log-expense { display: flex; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .log-expense input { font-size: 13px; padding: 7px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
+  .log-expense input.cat-expense-input { flex: 0 1 85px; }
+  .log-expense input.cat-note-input { flex: 1 1 100px; min-width: 0; }
   .log-expense input:focus { border-color: var(--text-soft); }
   .log-btn { font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap; }
   .log-btn:hover { background: var(--border-light); }
-  .history { margin-top: 4px; max-height: 120px; overflow-y: auto; }
-  .history-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+  .history { margin-top: 4px; max-height: 140px; overflow-y: auto; }
+  .history-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; gap: 8px; }
   .history-item:last-child { border-bottom: none; }
   .history-item strong { color: var(--text); font-weight: 600; }
+  .history-main { display: flex; align-items: baseline; gap: 6px; min-width: 0; overflow: hidden; }
+  .history-note { color: var(--text-faint); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .history-date-input {
+    color: var(--text-faint); font-size: 11px; white-space: nowrap;
+    border: none; background: transparent; outline: none; cursor: pointer;
+    font-family: inherit; padding: 2px 0; max-width: 90px;
+  }
+  .history-date-input:hover, .history-date-input:focus { color: var(--text-soft); }
+  .history-date-input::-webkit-calendar-picker-indicator { opacity: 0.45; }
   .del-btn { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 15px; padding: 0 2px; line-height: 1; }
   .del-btn:hover { color: var(--accent-over); }
   .empty-state { font-size: 12px; color: var(--text-faint); padding: 4px 0; }
@@ -111,7 +133,7 @@
   /* Setup / edit view */
   .setup-overlay { position: fixed; inset: 0; background: var(--bg); overflow-y: auto; z-index: 30; }
   .setup-inner { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.25rem 4rem; }
-  .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
   .setup-title { font-size: 17px; font-weight: 600; margin: 0; }
   .setup-done-btn { font-size: 13px; padding: 8px 14px; border: none; border-radius: 9px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
   .setup-done-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -135,6 +157,75 @@
   .add-account-btn { width: 100%; font-size: 13px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: transparent; color: var(--text-soft); cursor: pointer; margin-bottom: 1.5rem; }
   .add-account-btn:hover { background: var(--border-light); color: var(--text); }
   .setup-error-banner { background: #FBEAEA; border: 1px solid #E6BFBE; color: var(--accent-over); font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-bottom: 1rem; }
+
+  .period-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+  .period-range { font-size: 12px; color: var(--text-soft); font-weight: 600; margin: 0 0 10px; }
+  .period-account-name { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin: 10px 0 6px; }
+  .period-account-name:first-child { margin-top: 0; }
+  .period-cat-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 13.5px; padding: 3px 0; }
+  .period-cat-row .cat-name { color: var(--text); }
+  .period-cat-row .cat-amounts { color: var(--text-soft); }
+  .period-cat-row .cat-amounts strong { color: var(--text); }
+  .period-cat-row.over .cat-amounts strong { color: var(--accent-over); }
+
+  .setup-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .setup-header-actions .setup-done-btn { font-size: 12.5px; padding: 8px 12px; }
+  .setup-done-btn.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .setup-done-btn.secondary:hover { background: var(--border-light); }
+  .setup-done-btn.danger { background: var(--accent-over); }
+  .setup-done-btn.danger:hover { opacity: 0.85; }
+
+  .history-clear-row { display: flex; justify-content: flex-end; margin-bottom: 0.75rem; }
+  .history-clear-btn { font-size: 12px; color: var(--text-faint); background: none; border: none; cursor: pointer; padding: 0; }
+  .history-clear-btn:hover { color: var(--accent-over); }
+  .history-clear-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .history-clear-btn:disabled:hover { color: var(--text-faint); }
+
+  .period-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; gap: 8px; }
+  .period-card-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .period-expiry { font-size: 11px; color: var(--text-faint); margin: 2px 0 0; }
+  .period-del-btn { background: none; border: none; cursor: pointer; color: var(--text-faint); font-size: 17px; padding: 0 2px; line-height: 1; }
+  .period-del-btn:hover { color: var(--accent-over); }
+  .more-info-btn { font-size: 11.5px; color: var(--text-soft); background: none; border: 1px solid var(--border); border-radius: 7px; padding: 4px 9px; cursor: pointer; white-space: nowrap; }
+  .more-info-btn:hover { background: var(--border-light); color: var(--text); }
+  .period-detail { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-light); }
+  .period-detail-cat { margin-bottom: 10px; }
+  .period-detail-cat-name { font-size: 12px; font-weight: 600; color: var(--text-soft); margin: 6px 0 4px; }
+  .period-item-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 12.5px; color: var(--text); padding: 2px 0 2px 8px; }
+  .period-item-date { color: var(--text-faint); font-size: 11px; white-space: nowrap; }
+  .period-no-items { font-size: 12px; color: var(--text-faint); padding-left: 8px; margin: 2px 0; }
+
+  .print-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; z-index: 40; padding: 1.5rem; }
+  .print-modal { background: var(--card); border-radius: 14px; padding: 1.5rem; max-width: 320px; width: 100%; }
+  .print-modal-title { font-size: 15px; font-weight: 600; margin: 0 0 1rem; }
+  .print-modal-option { display: flex; align-items: flex-start; gap: 8px; font-size: 13.5px; margin-bottom: 10px; cursor: pointer; }
+  .print-modal-option input { margin-top: 3px; }
+  .print-modal-hint { color: var(--text-faint); font-size: 12px; }
+  .print-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1rem; }
+
+  .print-only { display: none; }
+  @media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area { display: block; position: absolute; top: 0; left: 0; width: 100%; padding: 1rem; }
+    .print-only { display: block; }
+  }
+  .print-period { margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid #ccc; }
+  .print-period-range { font-size: 14px; font-weight: 700; margin: 0 0 6px; }
+  .print-account-name { font-size: 12px; font-weight: 700; text-transform: uppercase; margin: 10px 0 4px; }
+  .print-cat-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 2px 0; }
+  .print-item-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 1px 0 1px 12px; color: #333; }
+
+  .trends-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .trends-table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  .trends-table th, .trends-table td { padding: 8px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--border-light); }
+  .trends-table th { font-size: 11.5px; font-weight: 600; color: var(--text-soft); position: sticky; top: 0; background: var(--bg); }
+  .trends-table .trends-subhead { font-weight: 400; color: var(--text-faint); font-size: 11px; }
+  .trends-table .trends-period-col { font-weight: 600; color: var(--text); position: sticky; left: 0; background: var(--bg); }
+  .trends-table td strong { color: var(--text); }
+  .trends-table td.trends-over strong { color: var(--accent-over); }
+  .trends-table .trends-of { color: var(--text-faint); font-size: 11.5px; }
+  .trends-table .trends-empty-cell { color: var(--text-faint); }
 </style>
 </head>
 <body>
@@ -143,11 +234,12 @@
 
 <div class="lock-screen" id="lock-screen">
   <div class="lock-card">
-    <p class="lock-title">Enter your 4-digit passcode</p>
-    <input type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" class="lock-input" id="lock-input" placeholder="••••" autofocus />
-    <button class="lock-btn" id="lock-submit">Unlock</button>
+    <p class="lock-title" id="auth-title">Log in</p>
+    <input type="text" autocomplete="username" class="lock-input wide" id="username-input" placeholder="Username" autofocus />
+    <input type="password" autocomplete="current-password" class="lock-input wide" id="password-input" placeholder="Password" />
+    <button class="lock-btn" id="auth-submit">Log in</button>
     <p class="lock-error" id="lock-error"></p>
-    <p class="lock-hint" id="lock-hint">First time? Type any new 4-digit code to create your own tracker.</p>
+    <p class="lock-hint" id="auth-toggle-hint">New here? <button class="link-btn" id="auth-toggle-btn">Create an account</button></p>
   </div>
 </div>
 
@@ -156,6 +248,9 @@
     <p class="title">Budget tracker</p>
     <div class="top-actions">
       <span class="save-status" id="save-status"></span>
+      <button class="icon-btn" id="undo-btn" disabled title="Undo last action">↶ Undo</button>
+      <button class="icon-btn" id="redo-btn" disabled title="Redo">↷ Redo</button>
+      <button class="icon-btn" id="history-btn">📅 History</button>
       <button class="icon-btn" id="edit-setup-btn">⚙ Edit accounts</button>
       <button class="icon-btn" id="lock-out-btn">🔒</button>
     </div>
@@ -178,9 +273,69 @@
   </div>
 </div>
 
+<div class="setup-overlay hidden" id="history-overlay">
+  <div class="setup-inner">
+    <div class="setup-header">
+      <p class="setup-title">Past pay periods</p>
+      <div class="setup-header-actions">
+        <button class="setup-done-btn secondary" id="history-trends-btn">Trends</button>
+        <button class="setup-done-btn secondary" id="history-export-btn">Export CSV</button>
+        <button class="setup-done-btn secondary" id="history-print-btn">Print</button>
+        <button class="setup-done-btn" id="history-close-btn">Close</button>
+      </div>
+    </div>
+    <div class="history-clear-row">
+      <button class="history-clear-btn" id="history-clear-btn" disabled>Clear all history</button>
+    </div>
+    <div id="history-list"></div>
+  </div>
+</div>
+
+<div class="print-modal-backdrop hidden" id="print-modal-backdrop">
+  <div class="print-modal">
+    <p class="print-modal-title">Print history</p>
+    <label class="print-modal-option">
+      <input type="radio" name="print-detail" value="summary" checked />
+      <span>Summary only <span class="print-modal-hint">— budget vs spent per category</span></span>
+    </label>
+    <label class="print-modal-option">
+      <input type="radio" name="print-detail" value="detailed" />
+      <span>With details <span class="print-modal-hint">— every logged expense</span></span>
+    </label>
+    <div class="print-modal-actions">
+      <button class="setup-done-btn secondary" id="print-modal-cancel">Cancel</button>
+      <button class="setup-done-btn" id="print-modal-confirm">Print</button>
+    </div>
+  </div>
+</div>
+
+<div class="print-modal-backdrop hidden" id="clear-confirm-backdrop">
+  <div class="print-modal">
+    <p class="print-modal-title">Clear all history?</p>
+    <p class="print-modal-hint" style="margin-bottom: 1rem;">This deletes every saved pay period. It can only be undone with the Undo button before you reload the page.</p>
+    <div class="print-modal-actions">
+      <button class="setup-done-btn secondary" id="clear-confirm-cancel">Cancel</button>
+      <button class="setup-done-btn danger" id="clear-confirm-confirm">Clear history</button>
+    </div>
+  </div>
+</div>
+
+<div id="print-area" class="print-only"></div>
+
+<div class="setup-overlay hidden" id="trends-overlay">
+  <div class="setup-inner">
+    <div class="setup-header">
+      <p class="setup-title">Spending trends</p>
+      <button class="setup-done-btn" id="trends-close-btn">Close</button>
+    </div>
+    <div id="trends-content"></div>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyC-ewFMP2sGm9lGWEUgbRjjiUFhurqw4H8",
@@ -193,18 +348,61 @@
 
   const fbApp = initializeApp(firebaseConfig);
   const db = getFirestore(fbApp);
+  const auth = getAuth(fbApp);
 
-  const PASSCODE_PATTERN = /^[0-9]{4}$/;
-  const SESSION_KEY = 'budget-tracker-passcode';
-  let PASSCODE = null;
+  const USERNAME_DOMAIN = '@budgettracker.local';
+  const USERNAME_PATTERN = /^[a-zA-Z0-9_.]{3,20}$/;
+  let currentUserId = null;
+  let authMode = 'login'; // 'login' or 'signup'
 
   const PALETTE = ['palette-0', 'palette-1', 'palette-2', 'palette-3', 'palette-4', 'palette-5'];
 
   function defaultState() {
-    return { accounts: [] };
+    return { accounts: [], pastPeriods: [], periodStart: Date.now() };
   }
 
   let state = defaultState();
+
+  // ---------- Undo / redo (session-only, in-memory) ----------
+  const UNDO_LIMIT = 20;
+  let undoStack = [];
+  let redoStack = [];
+
+  function snapshotState() { return JSON.parse(JSON.stringify(state)); }
+
+  function pushUndoSnapshot() {
+    undoStack.push(snapshotState());
+    if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+    redoStack = [];
+    updateUndoRedoButtons();
+  }
+
+  function undo() {
+    if (undoStack.length === 0) return;
+    redoStack.push(snapshotState());
+    state = undoStack.pop();
+    renderApp();
+    saveState();
+    updateUndoRedoButtons();
+    showToast('Undone');
+  }
+
+  function redo() {
+    if (redoStack.length === 0) return;
+    undoStack.push(snapshotState());
+    state = redoStack.pop();
+    renderApp();
+    saveState();
+    updateUndoRedoButtons();
+    showToast('Redone');
+  }
+
+  function updateUndoRedoButtons() {
+    const undoBtn = document.getElementById('undo-btn');
+    const redoBtn = document.getElementById('redo-btn');
+    if (undoBtn) undoBtn.disabled = undoStack.length === 0;
+    if (redoBtn) redoBtn.disabled = redoStack.length === 0;
+  }
 
   function uid() { return Math.random().toString(36).slice(2, 9); }
   function fmt(n) {
@@ -225,7 +423,7 @@
     if (el) el.textContent = text;
   }
 
-  function docRef() { return doc(db, 'budgets', PASSCODE); }
+  function docRef() { return doc(db, 'budgets', currentUserId); }
 
   async function saveState() {
     setSaveStatus('Saving…');
@@ -244,6 +442,9 @@
       const snap = await getDoc(docRef());
       if (snap.exists() && snap.data() && Array.isArray(snap.data().accounts) && snap.data().accounts.length > 0) {
         state = snap.data();
+        if (!Array.isArray(state.pastPeriods)) state.pastPeriods = [];
+        if (!state.periodStart) state.periodStart = Date.now();
+        pruneOldPeriods();
       } else {
         state = defaultState();
       }
@@ -254,43 +455,106 @@
     }
   }
 
-  // ---------- Lock screen ----------
-  function tryUnlock() {
-    const input = document.getElementById('lock-input');
+  // ---------- Auth (username + password via Firebase Auth) ----------
+  function usernameToEmail(username) {
+    return username.toLowerCase() + USERNAME_DOMAIN;
+  }
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    const title = document.getElementById('auth-title');
+    const submitBtn = document.getElementById('auth-submit');
+    const hintEl = document.getElementById('auth-toggle-hint');
     const errorEl = document.getElementById('lock-error');
-    const val = input.value.trim();
-    if (!PASSCODE_PATTERN.test(val)) {
-      errorEl.textContent = 'Enter a 4-digit passcode';
-      input.value = '';
-      input.focus();
+    errorEl.textContent = '';
+    if (mode === 'signup') {
+      title.textContent = 'Create your account';
+      submitBtn.textContent = 'Create account';
+      hintEl.innerHTML = 'Already have an account? <button class="link-btn" id="auth-toggle-btn">Log in</button>';
+    } else {
+      title.textContent = 'Log in';
+      submitBtn.textContent = 'Log in';
+      hintEl.innerHTML = 'New here? <button class="link-btn" id="auth-toggle-btn">Create an account</button>';
+    }
+    document.getElementById('auth-toggle-btn').addEventListener('click', () => {
+      setAuthMode(authMode === 'login' ? 'signup' : 'login');
+    });
+  }
+
+  function friendlyAuthError(err) {
+    const code = err && err.code;
+    if (code === 'auth/email-already-in-use') return 'That username is already taken.';
+    if (code === 'auth/weak-password') return 'Password must be at least 6 characters.';
+    if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Incorrect username or password.';
+    if (code === 'auth/user-not-found') return 'No account with that username.';
+    if (code === 'auth/invalid-email') return 'Usernames can only contain letters, numbers, periods, and underscores.';
+    if (code === 'auth/too-many-requests') return 'Too many attempts. Please wait a moment and try again.';
+    return 'Something went wrong. Please try again.';
+  }
+
+  async function submitAuth() {
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
+    const errorEl = document.getElementById('lock-error');
+    const submitBtn = document.getElementById('auth-submit');
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+
+    if (!USERNAME_PATTERN.test(username)) {
+      errorEl.textContent = 'Username must be 3-20 characters: letters, numbers, periods, underscores.';
       return;
     }
-    PASSCODE = val;
-    sessionStorage.setItem(SESSION_KEY, PASSCODE);
-    document.getElementById('lock-screen').classList.add('hidden');
-    document.getElementById('tracker-root').classList.remove('hidden');
-    boot();
+    if (password.length < 6) {
+      errorEl.textContent = 'Password must be at least 6 characters.';
+      return;
+    }
+
+    errorEl.textContent = '';
+    submitBtn.disabled = true;
+    const email = usernameToEmail(username);
+
+    try {
+      if (authMode === 'signup') {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+      }
+      // onAuthStateChanged below handles the rest (showing the app, booting state)
+    } catch (err) {
+      console.error('Auth error:', err);
+      errorEl.textContent = friendlyAuthError(err);
+      submitBtn.disabled = false;
+    }
   }
 
-  document.getElementById('lock-submit').addEventListener('click', tryUnlock);
-  document.getElementById('lock-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+  document.getElementById('auth-submit').addEventListener('click', submitAuth);
+  document.getElementById('username-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password-input').focus(); });
+  document.getElementById('password-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(); });
+  setAuthMode('login');
 
-  const savedPasscode = sessionStorage.getItem(SESSION_KEY);
-  if (savedPasscode && PASSCODE_PATTERN.test(savedPasscode)) {
-    PASSCODE = savedPasscode;
-    document.getElementById('lock-screen').classList.add('hidden');
-    document.getElementById('tracker-root').classList.remove('hidden');
-    boot();
-  }
+  onAuthStateChanged(auth, (user) => {
+    document.getElementById('auth-submit').disabled = false;
+    if (user) {
+      currentUserId = user.uid;
+      document.getElementById('lock-screen').classList.add('hidden');
+      document.getElementById('tracker-root').classList.remove('hidden');
+      boot();
+    } else {
+      currentUserId = null;
+      document.getElementById('tracker-root').classList.add('hidden');
+      document.getElementById('lock-screen').classList.remove('hidden');
+      document.getElementById('username-input').value = '';
+      document.getElementById('password-input').value = '';
+    }
+  });
 
   document.getElementById('lock-out-btn').addEventListener('click', () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    PASSCODE = null;
-    document.getElementById('tracker-root').classList.add('hidden');
-    document.getElementById('lock-screen').classList.remove('hidden');
-    document.getElementById('lock-input').value = '';
-    document.getElementById('lock-input').focus();
+    signOut(auth);
   });
+
+  document.getElementById('undo-btn').addEventListener('click', undo);
+  document.getElementById('redo-btn').addEventListener('click', redo);
 
   // ---------- Main app render ----------
   function renderApp() {
@@ -366,42 +630,89 @@
     document.getElementById('reset-period-btn').addEventListener('click', resetPeriod);
   }
 
+  function progressTier(pct) {
+    if (pct >= 100) return 'over';
+    if (pct >= 80) return 'warn';
+    return 'ok';
+  }
+
+  function toDateInputValue(ts) {
+    const d = ts ? new Date(ts) : new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function dateInputValueToTimestamp(val, originalTs) {
+    // Preserve the original time-of-day, just change the calendar date,
+    // so same-day ordering (newest-first) still makes sense.
+    const original = originalTs ? new Date(originalTs) : new Date();
+    const [year, month, day] = val.split('-').map(Number);
+    const updated = new Date(original);
+    updated.setFullYear(year, month - 1, day);
+    return updated.getTime();
+  }
+
   function buildCategoryCard(acc, cat) {
     const wrap = document.createElement('div');
     wrap.className = 'cat-card';
     const spent = cat.items.reduce((s, it) => s + it.amount, 0);
     const remaining = cat.budget - spent;
     const pct = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
-    const over = remaining < 0;
+    const tier = progressTier(cat.budget > 0 ? (spent / cat.budget) * 100 : 0);
+    const over = tier === 'over';
 
     wrap.innerHTML = `
       <div class="cat-header">
         <span class="cat-title">${escapeHtml(cat.name)}</span>
         <span class="cat-budget">of ${fmt(cat.budget)}</span>
       </div>
-      <div class="progress-bg"><div class="progress-fill ${over ? 'over' : ''}" style="width:${pct.toFixed(1)}%;${over ? '' : 'background:var(--accent-ok)'}"></div></div>
-      <p class="cat-remaining ${over ? 'over' : ''}">${over ? fmt(remaining) + ' over budget' : fmt(remaining) + ' left'}</p>
+      <div class="progress-bg"><div class="progress-fill tier-${tier}" style="width:${pct.toFixed(1)}%"></div></div>
+      <p class="cat-remaining ${tier !== 'ok' ? tier : ''}">${over ? fmt(remaining) + ' over budget' : fmt(remaining) + ' left'}</p>
       <div class="log-expense">
         <input type="number" min="0" step="0.01" placeholder="Amount" class="cat-expense-input" />
+        <input type="text" placeholder="Note (optional)" class="cat-note-input" maxlength="60" />
         <button class="log-btn">Add</button>
       </div>
       <div class="history">
         ${cat.items.length === 0 ? '<p class="empty-state">No expenses logged yet.</p>' :
-          cat.items.slice().reverse().map((item, i) => {
-            const realIdx = cat.items.length - 1 - i;
-            return `<div class="history-item"><strong>${fmt(item.amount)}</strong><button class="del-btn" data-idx="${realIdx}" aria-label="Remove expense">&times;</button></div>`;
-          }).join('')}
+          cat.items
+            .map((item, idx) => ({ item, idx }))
+            .sort((a, b) => (b.item.date || 0) - (a.item.date || 0))
+            .map(({ item, idx }) => {
+              const dateVal = toDateInputValue(item.date);
+              const noteStr = item.note ? escapeHtml(item.note) : '';
+              return `<div class="history-item">
+                <span class="history-main">
+                  <strong>${fmt(item.amount)}</strong>
+                  ${noteStr ? `<span class="history-note">${noteStr}</span>` : ''}
+                </span>
+                <span class="history-right">
+                  <input type="date" class="history-date-input" value="${dateVal}" data-idx="${idx}" aria-label="Expense date" />
+                  <button class="del-btn" data-idx="${idx}" aria-label="Remove expense">&times;</button>
+                </span>
+              </div>`;
+            }).join('')}
       </div>
     `;
 
-    const input = wrap.querySelector('.cat-expense-input');
+    const amountInput = wrap.querySelector('.cat-expense-input');
+    const noteInput = wrap.querySelector('.cat-note-input');
     const logBtn = wrap.querySelector('.log-btn');
-    const doLog = () => logExpense(acc.id, cat.id, input);
+    const doLog = () => logExpense(acc.id, cat.id, amountInput, noteInput);
     logBtn.addEventListener('click', doLog);
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') doLog(); });
+    amountInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLog(); });
+    noteInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLog(); });
 
     wrap.querySelectorAll('.del-btn').forEach(btn => {
       btn.addEventListener('click', () => deleteExpense(acc.id, cat.id, parseInt(btn.dataset.idx, 10)));
+    });
+
+    wrap.querySelectorAll('.history-date-input').forEach(dateInput => {
+      dateInput.addEventListener('change', () => {
+        editExpenseDate(acc.id, cat.id, parseInt(dateInput.dataset.idx, 10), dateInput.value);
+      });
     });
 
     return wrap;
@@ -424,6 +735,7 @@
     const input = document.querySelector(`.bal-input[data-acc="${accId}"]`);
     const val = parseFloat(input.value);
     if (isNaN(val) || val < 0) return;
+    pushUndoSnapshot();
     const acc = state.accounts.find(a => a.id === accId);
     acc.balance = val;
     recalcCategoriesForAccount(acc);
@@ -440,9 +752,61 @@
     });
   }
 
+  const HISTORY_RETENTION_MS = 366 * 24 * 60 * 60 * 1000; // ~1 year
+
+  function snapshotCurrentPeriodToHistory() {
+    const periodRecord = {
+      start: state.periodStart || null,
+      end: Date.now(),
+      accounts: state.accounts.map(acc => ({
+        name: acc.name,
+        categories: acc.categories.map(cat => ({
+          name: cat.name,
+          budget: cat.budget,
+          spent: cat.items.reduce((s, it) => s + it.amount, 0),
+          items: cat.items.map(it => ({ amount: it.amount, note: it.note || '', date: it.date || null }))
+        }))
+      }))
+    };
+    const hasAnyCategory = periodRecord.accounts.some(a => a.categories.length > 0);
+    const hasAnySpending = periodRecord.accounts.some(a => a.categories.some(c => c.spent > 0 || c.budget > 0));
+    if (hasAnyCategory && hasAnySpending) {
+      state.pastPeriods = state.pastPeriods || [];
+      state.pastPeriods.unshift(periodRecord);
+      pruneOldPeriods();
+    }
+    state.periodStart = Date.now();
+  }
+
+  function pruneOldPeriods() {
+    if (!Array.isArray(state.pastPeriods)) return;
+    const cutoff = Date.now() - HISTORY_RETENTION_MS;
+    state.pastPeriods = state.pastPeriods.filter(p => (p.end || 0) >= cutoff);
+  }
+
+  function deleteOnePeriod(idx) {
+    if (!Array.isArray(state.pastPeriods) || !state.pastPeriods[idx]) return;
+    pushUndoSnapshot();
+    state.pastPeriods.splice(idx, 1);
+    saveState();
+    openHistory();
+    showToast('Period deleted');
+  }
+
+  function clearAllHistory() {
+    if (!Array.isArray(state.pastPeriods) || state.pastPeriods.length === 0) return;
+    pushUndoSnapshot();
+    state.pastPeriods = [];
+    saveState();
+    openHistory();
+    showToast('History cleared');
+  }
+
   function applyPaycheck() {
     const p = parseFloat(document.getElementById('paycheck-input').value) || 0;
     if (p <= 0) return;
+    pushUndoSnapshot();
+    snapshotCurrentPeriodToHistory();
     state.accounts.forEach(acc => {
       acc.balance += p * (acc.splitPct / 100);
       recalcCategoriesForAccount(acc);
@@ -453,12 +817,14 @@
     showToast('Paycheck applied!');
   }
 
-  function logExpense(accId, catId, input) {
-    const val = parseFloat(input.value);
+  function logExpense(accId, catId, amountInput, noteInput) {
+    const val = parseFloat(amountInput.value);
     if (!val || val <= 0) return;
+    pushUndoSnapshot();
     const acc = state.accounts.find(a => a.id === accId);
     const cat = acc.categories.find(c => c.id === catId);
-    cat.items.push({ amount: val });
+    const note = (noteInput && noteInput.value.trim()) || '';
+    cat.items.push({ amount: val, note: note, date: Date.now() });
     acc.balance -= val;
     renderApp();
     saveState();
@@ -469,13 +835,29 @@
     const cat = acc.categories.find(c => c.id === catId);
     const removed = cat.items[idx];
     if (!removed) return;
+    pushUndoSnapshot();
     acc.balance += removed.amount;
     cat.items.splice(idx, 1);
     renderApp();
     saveState();
   }
 
+  function editExpenseDate(accId, catId, idx, newDateVal) {
+    if (!newDateVal) return;
+    const acc = state.accounts.find(a => a.id === accId);
+    const cat = acc.categories.find(c => c.id === catId);
+    const item = cat.items[idx];
+    if (!item) return;
+    pushUndoSnapshot();
+    item.date = dateInputValueToTimestamp(newDateVal, item.date);
+    renderApp();
+    saveState();
+    showToast('Date updated');
+  }
+
   function resetPeriod() {
+    pushUndoSnapshot();
+    snapshotCurrentPeriodToHistory();
     state.accounts.forEach(acc => {
       acc.categories.forEach(cat => {
         cat.items = [];
@@ -492,6 +874,321 @@
 
   document.getElementById('edit-setup-btn').addEventListener('click', openSetup);
   document.getElementById('setup-done-btn').addEventListener('click', closeSetup);
+
+  document.getElementById('history-btn').addEventListener('click', openHistory);
+  document.getElementById('history-close-btn').addEventListener('click', () => {
+    document.getElementById('history-overlay').classList.add('hidden');
+  });
+
+  document.getElementById('history-print-btn').addEventListener('click', () => {
+    document.getElementById('print-modal-backdrop').classList.remove('hidden');
+  });
+  document.getElementById('print-modal-cancel').addEventListener('click', () => {
+    document.getElementById('print-modal-backdrop').classList.add('hidden');
+  });
+  document.getElementById('print-modal-confirm').addEventListener('click', () => {
+    const detailLevel = document.querySelector('input[name="print-detail"]:checked').value;
+    buildPrintArea(detailLevel);
+    document.getElementById('print-modal-backdrop').classList.add('hidden');
+    window.print();
+  });
+
+  document.getElementById('history-export-btn').addEventListener('click', exportHistoryCsv);
+  document.getElementById('history-trends-btn').addEventListener('click', openTrends);
+  document.getElementById('trends-close-btn').addEventListener('click', () => {
+    document.getElementById('trends-overlay').classList.add('hidden');
+  });
+
+  function openTrends() {
+    const periods = state.pastPeriods || [];
+    const contentEl = document.getElementById('trends-content');
+
+    if (periods.length === 0) {
+      contentEl.innerHTML = '<p class="empty-state">No past pay periods yet. Trends will show up here once you have a few.</p>';
+      document.getElementById('trends-overlay').classList.remove('hidden');
+      return;
+    }
+
+    // Build a stable, ordered list of "Account › Category" columns across all periods,
+    // in the order they first appear (most recent period first).
+    const columnKeys = [];
+    const columnLabels = {};
+    periods.forEach(period => {
+      period.accounts.forEach(acc => {
+        acc.categories.forEach(cat => {
+          const key = acc.name + '|||' + cat.name;
+          if (!columnKeys.includes(key)) {
+            columnKeys.push(key);
+            columnLabels[key] = { account: acc.name, category: cat.name };
+          }
+        });
+      });
+    });
+
+    if (columnKeys.length === 0) {
+      contentEl.innerHTML = '<p class="empty-state">No categories with spending found yet.</p>';
+      document.getElementById('trends-overlay').classList.remove('hidden');
+      return;
+    }
+
+    const headerHtml = `
+      <th class="trends-period-col">Period</th>
+      ${columnKeys.map(key => `<th>${escapeHtml(columnLabels[key].account)}<br><span class="trends-subhead">${escapeHtml(columnLabels[key].category)}</span></th>`).join('')}
+    `;
+
+    const rowsHtml = periods.map(period => {
+      const startStr = formatPeriodDate(period.start);
+      const endStr = formatPeriodDate(period.end);
+      const rangeStr = startStr ? `${startStr} – ${endStr}` : endStr;
+
+      const lookup = {};
+      period.accounts.forEach(acc => {
+        acc.categories.forEach(cat => {
+          lookup[acc.name + '|||' + cat.name] = cat;
+        });
+      });
+
+      const cellsHtml = columnKeys.map(key => {
+        const cat = lookup[key];
+        if (!cat) return '<td class="trends-empty-cell">—</td>';
+        const over = cat.spent > cat.budget;
+        return `<td class="${over ? 'trends-over' : ''}"><strong>${fmt(cat.spent)}</strong><span class="trends-of"> of ${fmt(cat.budget)}</span></td>`;
+      }).join('');
+
+      return `<tr><td class="trends-period-col">${rangeStr}</td>${cellsHtml}</tr>`;
+    }).join('');
+
+    contentEl.innerHTML = `
+      <div class="trends-table-wrap">
+        <table class="trends-table">
+          <thead><tr>${headerHtml}</tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
+
+    document.getElementById('trends-overlay').classList.remove('hidden');
+  }
+
+
+
+  function csvEscape(val) {
+    const s = String(val == null ? '' : val);
+    if (/[",\n]/.test(s)) {
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function csvDate(ts) {
+    if (!ts) return '';
+    const d = new Date(ts);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function exportHistoryCsv() {
+    const periods = state.pastPeriods || [];
+    if (periods.length === 0) {
+      showToast('No history to export yet');
+      return;
+    }
+
+    const rows = [['Period Start', 'Period End', 'Account', 'Category', 'Category Budget', 'Category Spent', 'Expense Amount', 'Expense Note', 'Expense Date']];
+
+    periods.forEach(period => {
+      const periodStart = csvDate(period.start);
+      const periodEnd = csvDate(period.end);
+      period.accounts.forEach(acc => {
+        acc.categories.forEach(cat => {
+          const items = cat.items || [];
+          if (items.length === 0) {
+            rows.push([periodStart, periodEnd, acc.name, cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), '', '', '']);
+          } else {
+            items.forEach(it => {
+              rows.push([periodStart, periodEnd, acc.name, cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), it.amount.toFixed(2), it.note || '', csvDate(it.date)]);
+            });
+          }
+        });
+      });
+    });
+
+    const csvContent = rows.map(row => row.map(csvEscape).join(',')).join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateTag = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `budget-history-${dateTag}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('CSV downloaded');
+  }
+
+  document.getElementById('history-clear-btn').addEventListener('click', () => {
+    if (!state.pastPeriods || state.pastPeriods.length === 0) return;
+    document.getElementById('clear-confirm-backdrop').classList.remove('hidden');
+  });
+  document.getElementById('clear-confirm-cancel').addEventListener('click', () => {
+    document.getElementById('clear-confirm-backdrop').classList.add('hidden');
+  });
+  document.getElementById('clear-confirm-confirm').addEventListener('click', () => {
+    document.getElementById('clear-confirm-backdrop').classList.add('hidden');
+    clearAllHistory();
+  });
+
+  function buildPrintArea(detailLevel) {
+    const periods = state.pastPeriods || [];
+    const printArea = document.getElementById('print-area');
+    if (periods.length === 0) {
+      printArea.innerHTML = '<p>No past pay periods to print.</p>';
+      return;
+    }
+    printArea.innerHTML = periods.map(period => {
+      const startStr = formatPeriodDate(period.start);
+      const endStr = formatPeriodDate(period.end);
+      const rangeStr = startStr ? `${startStr} – ${endStr}` : `Ending ${endStr}`;
+
+      const accountsHtml = period.accounts
+        .filter(acc => acc.categories.length > 0)
+        .map(acc => {
+          const catsHtml = acc.categories.map(cat => {
+            const summaryRow = `<div class="print-cat-row"><span>${escapeHtml(cat.name)}</span><span>${fmt(cat.spent)} of ${fmt(cat.budget)}</span></div>`;
+            if (detailLevel !== 'detailed') return summaryRow;
+            const items = (cat.items || []).slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+            const itemsHtml = items.map(it => {
+              const dateStr = it.date ? formatPeriodDate(it.date) : '';
+              const noteStr = it.note ? ` — ${escapeHtml(it.note)}` : '';
+              return `<div class="print-item-row"><span>${fmt(it.amount)}${noteStr}</span><span>${dateStr}</span></div>`;
+            }).join('');
+            return summaryRow + itemsHtml;
+          }).join('');
+          return `<p class="print-account-name">${escapeHtml(acc.name)}</p>${catsHtml}`;
+        }).join('');
+
+      return `<div class="print-period">
+        <p class="print-period-range">${rangeStr}</p>
+        ${accountsHtml}
+      </div>`;
+    }).join('');
+  }
+
+  function formatPeriodDate(ts) {
+    if (!ts) return null;
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function buildPeriodDetailHtml(period) {
+    return period.accounts
+      .filter(acc => acc.categories.length > 0)
+      .map(acc => {
+        const catsHtml = acc.categories.map(cat => {
+          const items = (cat.items || []).slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+          const itemsHtml = items.length === 0
+            ? '<p class="period-no-items">No expenses logged</p>'
+            : items.map(it => {
+                const dateStr = it.date ? formatPeriodDate(it.date) : '';
+                const noteStr = it.note ? ` — ${escapeHtml(it.note)}` : '';
+                return `<div class="period-item-row"><span>${fmt(it.amount)}${noteStr}</span><span class="period-item-date">${dateStr}</span></div>`;
+              }).join('');
+          return `<div class="period-detail-cat">
+            <p class="period-detail-cat-name">${escapeHtml(cat.name)}</p>
+            ${itemsHtml}
+          </div>`;
+        }).join('');
+        return `<p class="period-account-name">${escapeHtml(acc.name)}</p>${catsHtml}`;
+      }).join('');
+  }
+
+  function buildPeriodSummaryHtml(period) {
+    return period.accounts
+      .filter(acc => acc.categories.length > 0)
+      .map(acc => {
+        const catsHtml = acc.categories.map(cat => {
+          const over = cat.spent > cat.budget;
+          return `<div class="period-cat-row ${over ? 'over' : ''}">
+            <span class="cat-name">${escapeHtml(cat.name)}</span>
+            <span class="cat-amounts"><strong>${fmt(cat.spent)}</strong> of ${fmt(cat.budget)}</span>
+          </div>`;
+        }).join('');
+        return `<p class="period-account-name">${escapeHtml(acc.name)}</p>${catsHtml}`;
+      }).join('');
+  }
+
+  function formatTimeRemaining(endTs) {
+    if (!endTs) return '';
+    const expiresAt = endTs + HISTORY_RETENTION_MS;
+    const msLeft = expiresAt - Date.now();
+    if (msLeft <= 0) return 'Expiring soon';
+    const days = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
+    if (days >= 60) {
+      const months = Math.round(days / 30);
+      return `Deletes in ~${months} month${months === 1 ? '' : 's'}`;
+    }
+    if (days > 1) return `Deletes in ${days} days`;
+    return 'Deletes in 1 day';
+  }
+
+  function openHistory() {
+    const listEl = document.getElementById('history-list');
+    const periods = state.pastPeriods || [];
+
+    if (periods.length === 0) {
+      listEl.innerHTML = '<p class="empty-state">No past pay periods yet. They\'ll show up here after you start a new pay period.</p>';
+      document.getElementById('history-clear-btn').disabled = true;
+    } else {
+      document.getElementById('history-clear-btn').disabled = false;
+      listEl.innerHTML = periods.map((period, idx) => {
+        const startStr = formatPeriodDate(period.start);
+        const endStr = formatPeriodDate(period.end);
+        const rangeStr = startStr ? `${startStr} – ${endStr}` : `Ending ${endStr}`;
+        const summaryHtml = buildPeriodSummaryHtml(period);
+        const expiryStr = formatTimeRemaining(period.end);
+
+        return `<div class="period-card">
+          <div class="period-card-top">
+            <div>
+              <p class="period-range">${rangeStr}</p>
+              <p class="period-expiry">${expiryStr}</p>
+            </div>
+            <div class="period-card-actions">
+              <button class="more-info-btn" data-period-idx="${idx}">More info</button>
+              <button class="period-del-btn" data-del-idx="${idx}" aria-label="Delete this period">&times;</button>
+            </div>
+          </div>
+          ${summaryHtml}
+          <div class="period-detail hidden" data-detail-idx="${idx}"></div>
+        </div>`;
+      }).join('');
+
+      listEl.querySelectorAll('.more-info-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.periodIdx, 10);
+          const detailEl = listEl.querySelector(`[data-detail-idx="${idx}"]`);
+          const isHidden = detailEl.classList.contains('hidden');
+          if (isHidden && !detailEl.dataset.built) {
+            detailEl.innerHTML = buildPeriodDetailHtml(periods[idx]);
+            detailEl.dataset.built = '1';
+          }
+          detailEl.classList.toggle('hidden');
+          btn.textContent = isHidden ? 'Less info' : 'More info';
+        });
+      });
+
+      listEl.querySelectorAll('.period-del-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.delIdx, 10);
+          deleteOnePeriod(idx);
+        });
+      });
+    }
+
+    document.getElementById('history-overlay').classList.remove('hidden');
+  }
   document.getElementById('add-account-btn').addEventListener('click', () => {
     setupDraft.accounts.push({ id: uid(), name: 'New account', balance: 0, splitPct: 0, categories: [] });
     renderSetup();
@@ -639,6 +1336,7 @@
   function closeSetup() {
     const errors = validateDraft();
     if (errors.length > 0) return;
+    pushUndoSnapshot();
     // Recalculate every category's budget from its (possibly new) splitPct against
     // the account's current balance, but keep existing logged expenses intact.
     setupDraft.accounts.forEach(acc => {
@@ -655,6 +1353,9 @@
   }
 
   async function boot() {
+    undoStack = [];
+    redoStack = [];
+    updateUndoRedoButtons();
     await loadState();
     renderApp();
     if (state.accounts.length === 0) {
