@@ -23,6 +23,37 @@
     --palette-4: #5B8FB0;
     --palette-5: #8A7BC4;
   }
+  body[data-theme="dark"] {
+    --bg: #18171a;
+    --card: #242228;
+    --border: #3a3840;
+    --border-light: #2e2c34;
+    --text: #f0eee9;
+    --text-soft: #8f8b98;
+    --text-faint: #5e5a66;
+    --accent-over: #e05a54;
+    --accent-warn: #e0aa4a;
+    --accent-ok: #5DAA8B;
+    --palette-0: #5DAA8B;
+    --palette-1: #7b7fd4;
+    --palette-2: #d4a84e;
+    --palette-3: #cc7a75;
+    --palette-4: #6aa0c4;
+    --palette-5: #9a8ed4;
+  }
+  body[data-theme="dark"] .setup-error-banner {
+    background: #3a1f1f;
+    border-color: #7a3535;
+  }
+  body[data-theme="dark"] .trends-table th,
+  body[data-theme="dark"] .trends-table .trends-period-col {
+    background: var(--bg);
+  }
+  body[data-theme="dark"] .lock-input:-webkit-autofill,
+  body[data-theme="dark"] .lock-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+    -webkit-text-fill-color: var(--text);
+  }
   * { box-sizing: border-box; }
   html, body {
     margin: 0;
@@ -32,19 +63,131 @@
     min-height: 100vh;
   }
 
-  .lock-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-  .lock-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 16px; padding: 2rem 1.75rem; max-width: 320px; width: 100%; text-align: center; }
-  .lock-title { font-size: 16px; font-weight: 600; margin: 0 0 1.25rem; }
-  .lock-input { width: 100%; font-size: 20px; text-align: center; letter-spacing: 0.15em; padding: 12px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); outline: none; margin-bottom: 12px; }
+  .lock-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .lock-screen::before {
+    content: '';
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-ok) 0%, transparent 70%);
+    opacity: 0.07;
+    top: -120px;
+    right: -100px;
+    pointer-events: none;
+  }
+  .lock-screen::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--palette-1) 0%, transparent 70%);
+    opacity: 0.06;
+    bottom: -80px;
+    left: -80px;
+    pointer-events: none;
+  }
+  .lock-card {
+    background: var(--card);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 2.25rem 2rem 2rem;
+    max-width: 340px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  }
+  body[data-theme="dark"] .lock-card {
+    box-shadow: 0 4px 32px rgba(0,0,0,0.35);
+  }
+  .lock-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 22px;
+    line-height: 1;
+  }
+  .lock-app-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.35rem;
+  }
+  .lock-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 1.75rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+  .lock-field {
+    position: relative;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .lock-field-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15px;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+  .lock-input {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px 12px 12px 38px;
+    border: 1.5px solid var(--border);
+    border-radius: 11px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+  }
+  .lock-input::placeholder { color: var(--text-faint); }
   .lock-input:focus { border-color: var(--text-soft); }
-  .lock-input.wide { font-size: 15px; text-align: left; letter-spacing: normal; }
-  .lock-btn { width: 100%; font-size: 14px; padding: 11px; border: none; border-radius: 10px; background: var(--text); color: var(--card); cursor: pointer; font-weight: 500; }
+  .lock-input.wide { font-size: 14px; text-align: left; letter-spacing: normal; }
+  .lock-btn {
+    width: 100%;
+    font-size: 14px;
+    padding: 12px;
+    border: none;
+    border-radius: 11px;
+    background: var(--text);
+    color: var(--card);
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 6px;
+    letter-spacing: 0.01em;
+    transition: opacity 0.15s;
+  }
   .lock-btn:hover { opacity: 0.85; }
   .lock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .lock-error { font-size: 12.5px; color: var(--accent-over); margin: 10px 0 0; min-height: 16px; }
-  .lock-hint { font-size: 12px; color: var(--text-faint); margin: 6px 0 0; }
-  .link-btn { background: none; border: none; color: var(--text); font-weight: 600; cursor: pointer; padding: 0; font-size: 12px; text-decoration: underline; }
-  .link-btn:hover { opacity: 0.8; }
+  .lock-hint { font-size: 12.5px; color: var(--text-faint); margin: 14px 0 0; }
+  .link-btn { background: none; border: none; color: var(--text-soft); font-weight: 600; cursor: pointer; padding: 0; font-size: 12.5px; text-decoration: none; border-bottom: 1px solid var(--border); }
+  .link-btn:hover { color: var(--text); border-bottom-color: var(--text); }
 
   .tracker { max-width: 520px; margin: 0 auto; padding: 1.75rem 1.25rem 3rem; position: relative; }
   .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
@@ -55,6 +198,19 @@
   .icon-btn:hover { color: var(--text); }
   .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .icon-btn:disabled:hover { color: var(--text-soft); }
+
+  .more-menu-wrap { position: relative; display: inline-flex; }
+  .more-menu {
+    position: absolute; top: calc(100% + 8px); right: 0;
+    background: var(--card); border: 1px solid var(--border-light); border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); padding: 6px; min-width: 180px; z-index: 25;
+  }
+  .more-menu-item {
+    display: block; width: 100%; text-align: left; font-size: 13px; color: var(--text);
+    background: none; border: none; cursor: pointer; padding: 9px 10px; border-radius: 8px;
+    white-space: nowrap;
+  }
+  .more-menu-item:hover { background: var(--border-light); }
   .section-label { font-size: 11px; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.07em; margin: 0 0 8px; font-weight: 600; }
 
   .account-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
@@ -121,9 +277,7 @@
   .del-btn:hover { color: var(--accent-over); }
   .empty-state { font-size: 12px; color: var(--text-faint); padding: 4px 0; }
 
-  .reset-row { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
-  .reset-btn { font-size: 12px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; gap: 4px; }
-  .reset-btn:hover { color: var(--text); }
+
 
   .toast { position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--text); color: var(--card); border-radius: 10px; padding: 9px 16px; font-size: 13px; opacity: 0; transition: opacity 0.25s, transform 0.25s; pointer-events: none; white-space: nowrap; z-index: 20; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -234,12 +388,25 @@
 
 <div class="lock-screen" id="lock-screen">
   <div class="lock-card">
-    <p class="lock-title" id="auth-title">Log in</p>
-    <input type="text" autocomplete="username" class="lock-input wide" id="username-input" placeholder="Username" autofocus />
-    <input type="password" autocomplete="current-password" class="lock-input wide" id="password-input" placeholder="Password" />
+    <div class="lock-logo">💰</div>
+    <p class="lock-app-name">Budget Tracker</p>
+    <p class="lock-title" id="auth-title">Welcome back</p>
+    <div class="lock-field">
+      <span class="lock-field-icon">✉️</span>
+      <input type="email" autocomplete="email" class="lock-input wide" id="email-input" placeholder="Email" autofocus />
+    </div>
+    <div class="lock-field">
+      <span class="lock-field-icon">🔑</span>
+      <input type="password" autocomplete="current-password" class="lock-input wide" id="password-input" placeholder="Password" />
+    </div>
+    <div class="lock-field hidden" id="confirm-password-field">
+      <span class="lock-field-icon">🔑</span>
+      <input type="password" autocomplete="new-password" class="lock-input wide" id="confirm-password-input" placeholder="Confirm password" />
+    </div>
     <button class="lock-btn" id="auth-submit">Log in</button>
     <p class="lock-error" id="lock-error"></p>
     <p class="lock-hint" id="auth-toggle-hint">New here? <button class="link-btn" id="auth-toggle-btn">Create an account</button></p>
+    <p class="lock-hint" id="forgot-password-hint"><button class="link-btn" id="forgot-password-btn">Forgot password?</button></p>
   </div>
 </div>
 
@@ -252,9 +419,18 @@
       <button class="icon-btn" id="redo-btn" disabled title="Redo">↷ Redo</button>
       <button class="icon-btn" id="history-btn">📅 History</button>
       <button class="icon-btn" id="edit-setup-btn">⚙ Edit accounts</button>
+      <button class="icon-btn" id="dark-mode-btn" title="Toggle dark mode">☀️</button>
+      <div class="more-menu-wrap">
+        <button class="icon-btn" id="more-menu-btn" title="More options">⋯</button>
+        <div class="more-menu hidden" id="more-menu-dropdown">
+          <button class="more-menu-item" id="backup-export-btn">⬇ Backup (export)</button>
+          <button class="more-menu-item" id="backup-import-btn">⬆ Restore (import)</button>
+        </div>
+      </div>
       <button class="icon-btn" id="lock-out-btn">🔒</button>
     </div>
   </div>
+  <input type="file" id="backup-file-input" accept=".json" class="hidden" />
   <div id="app-content">
     <div class="loading-state">Loading your data&hellip;</div>
   </div>
@@ -320,6 +496,18 @@
   </div>
 </div>
 
+<div class="print-modal-backdrop hidden" id="import-confirm-backdrop">
+  <div class="print-modal">
+    <p class="print-modal-title">Restore this backup?</p>
+    <p class="print-modal-hint" id="import-confirm-detail" style="margin-bottom: 0.5rem;"></p>
+    <p class="print-modal-hint" style="margin-bottom: 1rem;">This replaces everything currently in your account — accounts, balances, and history. You can Undo right after if something looks wrong, but that only works until you reload the page.</p>
+    <div class="print-modal-actions">
+      <button class="setup-done-btn secondary" id="import-confirm-cancel">Cancel</button>
+      <button class="setup-done-btn danger" id="import-confirm-confirm">Restore</button>
+    </div>
+  </div>
+</div>
+
 <div id="print-area" class="print-only"></div>
 
 <div class="setup-overlay hidden" id="trends-overlay">
@@ -335,7 +523,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyC-ewFMP2sGm9lGWEUgbRjjiUFhurqw4H8",
@@ -350,8 +538,6 @@
   const db = getFirestore(fbApp);
   const auth = getAuth(fbApp);
 
-  const USERNAME_DOMAIN = '@budgettracker.local';
-  const USERNAME_PATTERN = /^[a-zA-Z0-9_.]{3,20}$/;
   let currentUserId = null;
   let authMode = 'login'; // 'login' or 'signup'
 
@@ -455,25 +641,27 @@
     }
   }
 
-  // ---------- Auth (username + password via Firebase Auth) ----------
-  function usernameToEmail(username) {
-    return username.toLowerCase() + USERNAME_DOMAIN;
-  }
-
+  // ---------- Auth (email + password via Firebase Auth) ----------
   function setAuthMode(mode) {
     authMode = mode;
     const title = document.getElementById('auth-title');
     const submitBtn = document.getElementById('auth-submit');
     const hintEl = document.getElementById('auth-toggle-hint');
     const errorEl = document.getElementById('lock-error');
+    const confirmField = document.getElementById('confirm-password-field');
+    const forgotHint = document.getElementById('forgot-password-hint');
     errorEl.textContent = '';
     if (mode === 'signup') {
-      title.textContent = 'Create your account';
+      title.textContent = 'Create account';
       submitBtn.textContent = 'Create account';
+      confirmField.classList.remove('hidden');
+      forgotHint.classList.add('hidden');
       hintEl.innerHTML = 'Already have an account? <button class="link-btn" id="auth-toggle-btn">Log in</button>';
     } else {
-      title.textContent = 'Log in';
+      title.textContent = 'Welcome back';
       submitBtn.textContent = 'Log in';
+      confirmField.classList.add('hidden');
+      forgotHint.classList.remove('hidden');
       hintEl.innerHTML = 'New here? <button class="link-btn" id="auth-toggle-btn">Create an account</button>';
     }
     document.getElementById('auth-toggle-btn').addEventListener('click', () => {
@@ -483,36 +671,46 @@
 
   function friendlyAuthError(err) {
     const code = err && err.code;
-    if (code === 'auth/email-already-in-use') return 'That username is already taken.';
+    if (code === 'auth/email-already-in-use') return 'An account with that email already exists.';
     if (code === 'auth/weak-password') return 'Password must be at least 6 characters.';
-    if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Incorrect username or password.';
-    if (code === 'auth/user-not-found') return 'No account with that username.';
-    if (code === 'auth/invalid-email') return 'Usernames can only contain letters, numbers, periods, and underscores.';
+    if (code === 'auth/invalid-credential' || code === 'auth/wrong-password') return 'Incorrect email or password.';
+    if (code === 'auth/user-not-found') return 'No account found with that email.';
+    if (code === 'auth/invalid-email') return 'Please enter a valid email address.';
     if (code === 'auth/too-many-requests') return 'Too many attempts. Please wait a moment and try again.';
     return 'Something went wrong. Please try again.';
   }
 
   async function submitAuth() {
-    const usernameInput = document.getElementById('username-input');
-    const passwordInput = document.getElementById('password-input');
-    const errorEl = document.getElementById('lock-error');
     const submitBtn = document.getElementById('auth-submit');
+    if (submitBtn.disabled) return;
 
-    const username = usernameInput.value.trim();
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const confirmInput = document.getElementById('confirm-password-input');
+    const errorEl = document.getElementById('lock-error');
+
+    const email = emailInput.value.trim();
     const password = passwordInput.value;
 
-    if (!USERNAME_PATTERN.test(username)) {
-      errorEl.textContent = 'Username must be 3-20 characters: letters, numbers, periods, underscores.';
+    if (!email) {
+      errorEl.textContent = 'Please enter your email address.';
       return;
     }
     if (password.length < 6) {
       errorEl.textContent = 'Password must be at least 6 characters.';
       return;
     }
+    if (authMode === 'signup') {
+      const confirm = confirmInput.value;
+      if (password !== confirm) {
+        errorEl.textContent = 'Passwords don\'t match.';
+        return;
+      }
+    }
 
     errorEl.textContent = '';
+    errorEl.style.color = 'var(--accent-over)';
     submitBtn.disabled = true;
-    const email = usernameToEmail(username);
 
     try {
       if (authMode === 'signup') {
@@ -520,7 +718,7 @@
       } else {
         await signInWithEmailAndPassword(auth, email, password);
       }
-      // onAuthStateChanged below handles the rest (showing the app, booting state)
+      // onAuthStateChanged below handles the rest
     } catch (err) {
       console.error('Auth error:', err);
       errorEl.textContent = friendlyAuthError(err);
@@ -528,24 +726,61 @@
     }
   }
 
+  async function handleForgotPassword() {
+    const emailInput = document.getElementById('email-input');
+    const errorEl = document.getElementById('lock-error');
+    const email = emailInput.value.trim();
+    if (!email) {
+      errorEl.textContent = 'Enter your email above first.';
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      errorEl.style.color = 'var(--accent-ok)';
+      errorEl.textContent = 'Password reset email sent — check your inbox.';
+    } catch (err) {
+      errorEl.style.color = 'var(--accent-over)';
+      errorEl.textContent = friendlyAuthError(err);
+    }
+  }
+
   document.getElementById('auth-submit').addEventListener('click', submitAuth);
-  document.getElementById('username-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password-input').focus(); });
-  document.getElementById('password-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(); });
+  document.getElementById('forgot-password-btn').addEventListener('click', handleForgotPassword);
+  document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password-input').focus(); });
+  document.getElementById('password-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (authMode === 'signup') document.getElementById('confirm-password-input').focus();
+      else submitAuth();
+    }
+  });
+  document.getElementById('confirm-password-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAuth(); });
+  // Reset error color when user starts typing again
+  document.getElementById('email-input').addEventListener('input', () => {
+    document.getElementById('lock-error').style.color = 'var(--accent-over)';
+  });
   setAuthMode('login');
+
+  let bootedForUser = null;
 
   onAuthStateChanged(auth, (user) => {
     document.getElementById('auth-submit').disabled = false;
     if (user) {
-      currentUserId = user.uid;
       document.getElementById('lock-screen').classList.add('hidden');
       document.getElementById('tracker-root').classList.remove('hidden');
-      boot();
+      if (bootedForUser !== user.uid) {
+        bootedForUser = user.uid;
+        currentUserId = user.uid;
+        boot();
+      }
     } else {
+      bootedForUser = null;
       currentUserId = null;
       document.getElementById('tracker-root').classList.add('hidden');
       document.getElementById('lock-screen').classList.remove('hidden');
-      document.getElementById('username-input').value = '';
+      document.getElementById('email-input').value = '';
       document.getElementById('password-input').value = '';
+      document.getElementById('confirm-password-input').value = '';
+      document.getElementById('lock-error').style.color = 'var(--accent-over)';
     }
   });
 
@@ -553,8 +788,165 @@
     signOut(auth);
   });
 
+  // ---------- Dark mode ----------
+  function applyTheme(dark) {
+    document.body.dataset.theme = dark ? 'dark' : '';
+    const btn = document.getElementById('dark-mode-btn');
+    if (btn) btn.textContent = dark ? '🌙' : '☀️';
+    try { localStorage.setItem('bt-theme', dark ? 'dark' : 'light'); } catch (_) {}
+  }
+
+  function initTheme() {
+    let stored = null;
+    try { stored = localStorage.getItem('bt-theme'); } catch (_) {}
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(stored ? stored === 'dark' : prefersDark);
+  }
+
+  document.getElementById('dark-mode-btn').addEventListener('click', () => {
+    applyTheme(document.body.dataset.theme !== 'dark');
+  });
+
+  initTheme();
+
   document.getElementById('undo-btn').addEventListener('click', undo);
   document.getElementById('redo-btn').addEventListener('click', redo);
+
+  // ---------- Backup / restore (full account export & import) ----------
+  const BACKUP_FORMAT_VERSION = 1;
+
+  function toggleMoreMenu(forceState) {
+    const menu = document.getElementById('more-menu-dropdown');
+    const shouldShow = forceState !== undefined ? forceState : menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', !shouldShow);
+  }
+
+  document.getElementById('more-menu-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMoreMenu();
+  });
+
+  document.addEventListener('click', (e) => {
+    const wrap = document.querySelector('.more-menu-wrap');
+    if (wrap && !wrap.contains(e.target)) {
+      toggleMoreMenu(false);
+    }
+  });
+
+  document.getElementById('backup-export-btn').addEventListener('click', () => {
+    toggleMoreMenu(false);
+    exportBackup();
+  });
+
+  document.getElementById('backup-import-btn').addEventListener('click', () => {
+    toggleMoreMenu(false);
+    document.getElementById('backup-file-input').click();
+  });
+
+  document.getElementById('backup-file-input').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) handleBackupFileSelected(file);
+    e.target.value = '';
+  });
+
+  function exportBackup() {
+    const payload = {
+      formatVersion: BACKUP_FORMAT_VERSION,
+      exportedAt: Date.now(),
+      state: state
+    };
+    const json = JSON.stringify(payload, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateTag = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `budget-tracker-backup-${dateTag}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Backup downloaded');
+  }
+
+  function isValidBackupShape(parsed) {
+    if (!parsed || typeof parsed !== 'object') return false;
+    if (!parsed.state || typeof parsed.state !== 'object') return false;
+    if (!Array.isArray(parsed.state.accounts)) return false;
+    return true;
+  }
+
+  function normalizeImportedState(rawState) {
+    const accounts = (rawState.accounts || []).map(acc => ({
+      id: acc.id || uid(),
+      name: typeof acc.name === 'string' ? acc.name : 'Account',
+      balance: typeof acc.balance === 'number' && !isNaN(acc.balance) ? acc.balance : 0,
+      splitPct: typeof acc.splitPct === 'number' && !isNaN(acc.splitPct) ? acc.splitPct : 0,
+      categories: Array.isArray(acc.categories) ? acc.categories.map(cat => ({
+        id: cat.id || uid(),
+        name: typeof cat.name === 'string' ? cat.name : 'Category',
+        splitPct: typeof cat.splitPct === 'number' && !isNaN(cat.splitPct) ? cat.splitPct : 0,
+        budget: typeof cat.budget === 'number' && !isNaN(cat.budget) ? cat.budget : 0,
+        items: Array.isArray(cat.items) ? cat.items.filter(it => it && typeof it.amount === 'number' && !isNaN(it.amount)).map(it => ({
+          amount: it.amount,
+          note: typeof it.note === 'string' ? it.note : '',
+          date: typeof it.date === 'number' ? it.date : null
+        })) : []
+      })) : []
+    }));
+
+    const pastPeriods = Array.isArray(rawState.pastPeriods) ? rawState.pastPeriods : [];
+
+    return {
+      accounts: accounts,
+      pastPeriods: pastPeriods,
+      periodStart: typeof rawState.periodStart === 'number' ? rawState.periodStart : Date.now()
+    };
+  }
+
+  let pendingImportState = null;
+
+  function handleBackupFileSelected(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      let parsed;
+      try {
+        parsed = JSON.parse(reader.result);
+      } catch (err) {
+        showToast('That file isn\'t valid backup data');
+        return;
+      }
+      if (!isValidBackupShape(parsed)) {
+        showToast('That file doesn\'t look like a budget tracker backup');
+        return;
+      }
+      pendingImportState = normalizeImportedState(parsed.state);
+      const exportedAtStr = parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'an unknown date';
+      document.getElementById('import-confirm-detail').textContent = `This backup was exported on ${exportedAtStr}.`;
+      document.getElementById('import-confirm-backdrop').classList.remove('hidden');
+    };
+    reader.onerror = () => showToast('Could not read that file');
+    reader.readAsText(file);
+  }
+
+  document.getElementById('import-confirm-cancel').addEventListener('click', () => {
+    pendingImportState = null;
+    document.getElementById('import-confirm-backdrop').classList.add('hidden');
+  });
+
+  document.getElementById('import-confirm-confirm').addEventListener('click', () => {
+    if (!pendingImportState) return;
+    pushUndoSnapshot();
+    state = pendingImportState;
+    if (!Array.isArray(state.pastPeriods)) state.pastPeriods = [];
+    if (!state.periodStart) state.periodStart = Date.now();
+    pruneOldPeriods();
+    pendingImportState = null;
+    document.getElementById('import-confirm-backdrop').classList.add('hidden');
+    renderApp();
+    saveState();
+    showToast('Backup restored');
+  });
 
   // ---------- Main app render ----------
   function renderApp() {
@@ -619,15 +1011,6 @@
     document.getElementById('apply-paycheck-btn').addEventListener('click', applyPaycheck);
     updatePaycheckPreview();
 
-    const divider2 = document.createElement('hr');
-    divider2.className = 'divider';
-    root.appendChild(divider2);
-
-    const resetRow = document.createElement('div');
-    resetRow.className = 'reset-row';
-    resetRow.innerHTML = `<span></span><button class="reset-btn" id="reset-period-btn">↻ New pay period</button>`;
-    root.appendChild(resetRow);
-    document.getElementById('reset-period-btn').addEventListener('click', resetPeriod);
   }
 
   function progressTier(pct) {
@@ -678,9 +1061,13 @@
       <div class="history">
         ${cat.items.length === 0 ? '<p class="empty-state">No expenses logged yet.</p>' :
           cat.items
-            .map((item, idx) => ({ item, idx }))
-            .sort((a, b) => (b.item.date || 0) - (a.item.date || 0))
-            .map(({ item, idx }) => {
+            .map((item) => {
+              if (!item.id) item.id = uid(); // backfill id for items saved before this fix
+              return item;
+            })
+            .slice()
+            .sort((a, b) => (b.date || 0) - (a.date || 0))
+            .map((item) => {
               const dateVal = toDateInputValue(item.date);
               const noteStr = item.note ? escapeHtml(item.note) : '';
               return `<div class="history-item">
@@ -689,8 +1076,8 @@
                   ${noteStr ? `<span class="history-note">${noteStr}</span>` : ''}
                 </span>
                 <span class="history-right">
-                  <input type="date" class="history-date-input" value="${dateVal}" data-idx="${idx}" aria-label="Expense date" />
-                  <button class="del-btn" data-idx="${idx}" aria-label="Remove expense">&times;</button>
+                  <input type="date" class="history-date-input" value="${dateVal}" data-item-id="${item.id}" aria-label="Expense date" />
+                  <button class="del-btn" data-item-id="${item.id}" aria-label="Remove expense">&times;</button>
                 </span>
               </div>`;
             }).join('')}
@@ -706,12 +1093,12 @@
     noteInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLog(); });
 
     wrap.querySelectorAll('.del-btn').forEach(btn => {
-      btn.addEventListener('click', () => deleteExpense(acc.id, cat.id, parseInt(btn.dataset.idx, 10)));
+      btn.addEventListener('click', () => deleteExpense(acc.id, cat.id, btn.dataset.itemId));
     });
 
     wrap.querySelectorAll('.history-date-input').forEach(dateInput => {
       dateInput.addEventListener('change', () => {
-        editExpenseDate(acc.id, cat.id, parseInt(dateInput.dataset.idx, 10), dateInput.value);
+        editExpenseDate(acc.id, cat.id, dateInput.dataset.itemId, dateInput.value);
       });
     });
 
@@ -748,7 +1135,7 @@
   function recalcCategoriesForAccount(acc) {
     acc.categories.forEach(cat => {
       cat.budget = acc.balance * (cat.splitPct / 100);
-      cat.items = [];
+      // Preserve existing items — only recalc the budget ceiling
     });
   }
 
@@ -808,8 +1195,11 @@
     pushUndoSnapshot();
     snapshotCurrentPeriodToHistory();
     state.accounts.forEach(acc => {
-      acc.balance += p * (acc.splitPct / 100);
-      recalcCategoriesForAccount(acc);
+      acc.balance = Math.round((acc.balance + p * (acc.splitPct / 100)) * 100) / 100;
+      acc.categories.forEach(cat => {
+        cat.items = []; // start fresh period after snapshot
+        cat.budget = acc.balance * (cat.splitPct / 100);
+      });
     });
     document.getElementById('paycheck-input').value = '';
     renderApp();
@@ -824,29 +1214,30 @@
     const acc = state.accounts.find(a => a.id === accId);
     const cat = acc.categories.find(c => c.id === catId);
     const note = (noteInput && noteInput.value.trim()) || '';
-    cat.items.push({ amount: val, note: note, date: Date.now() });
-    acc.balance -= val;
+    cat.items.push({ id: uid(), amount: val, note: note, date: Date.now() });
+    acc.balance = Math.round((acc.balance - val) * 100) / 100;
     renderApp();
     saveState();
   }
 
-  function deleteExpense(accId, catId, idx) {
+  function deleteExpense(accId, catId, itemId) {
     const acc = state.accounts.find(a => a.id === accId);
     const cat = acc.categories.find(c => c.id === catId);
+    const idx = cat.items.findIndex(it => it.id === itemId);
+    if (idx === -1) return;
     const removed = cat.items[idx];
-    if (!removed) return;
     pushUndoSnapshot();
-    acc.balance += removed.amount;
+    acc.balance = Math.round((acc.balance + removed.amount) * 100) / 100;
     cat.items.splice(idx, 1);
     renderApp();
     saveState();
   }
 
-  function editExpenseDate(accId, catId, idx, newDateVal) {
+  function editExpenseDate(accId, catId, itemId, newDateVal) {
     if (!newDateVal) return;
     const acc = state.accounts.find(a => a.id === accId);
     const cat = acc.categories.find(c => c.id === catId);
-    const item = cat.items[idx];
+    const item = cat.items.find(it => it.id === itemId);
     if (!item) return;
     pushUndoSnapshot();
     item.date = dateInputValueToTimestamp(newDateVal, item.date);
@@ -1337,12 +1728,13 @@
     const errors = validateDraft();
     if (errors.length > 0) return;
     pushUndoSnapshot();
-    // Recalculate every category's budget from its (possibly new) splitPct against
-    // the account's current balance, but keep existing logged expenses intact.
     setupDraft.accounts.forEach(acc => {
+      const alreadySpent = acc.categories.reduce((s, cat) =>
+        s + (cat.items || []).reduce((cs, it) => cs + it.amount, 0), 0);
+      const gross = acc.balance + alreadySpent;
       acc.categories.forEach(cat => {
         cat.items = cat.items || [];
-        cat.budget = acc.balance * (cat.splitPct / 100);
+        cat.budget = gross * (cat.splitPct / 100);
       });
     });
     state = setupDraft;
