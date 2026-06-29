@@ -227,6 +227,25 @@
   .set-btn:hover { background: var(--border-light); }
   .set-btn:active { transform: scale(0.97); }
 
+  .add-deposit-toggle-btn {
+    font-size: 12px; color: var(--text-soft); background: none; border: none;
+    cursor: pointer; padding: 8px 0 0; display: block; font-weight: 500;
+  }
+  .add-deposit-toggle-btn:hover { color: var(--text); }
+  .deposit-form { margin-top: 8px; padding: 10px; background: var(--bg); border-radius: 10px; }
+  .deposit-form-row { display: flex; gap: 6px; margin-bottom: 6px; align-items: center; }
+  .deposit-form-row:last-child { margin-bottom: 0; }
+  .deposit-form-row span { font-size: 13px; color: var(--text-faint); }
+  .deposit-form-row input { font-size: 13px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--text); outline: none; }
+  .deposit-amount-input { flex: 0 1 85px; }
+  .deposit-date-input { flex: 1; min-width: 0; }
+  .deposit-note-input { flex: 1; min-width: 0; }
+  .deposit-submit-btn { font-size: 12px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text); cursor: pointer; white-space: nowrap; }
+  .deposit-submit-btn:hover { background: var(--border-light); }
+  .deposit-history { margin-top: 6px; }
+  .deposit-amount { color: var(--accent-ok); }
+  .expense-amount { color: var(--accent-over); }
+
   .divider { border: none; border-top: 1px solid var(--border-light); margin: 1.75rem 0; }
   .paycheck-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.6rem; }
   .paycheck-row span { font-size: 22px; font-weight: 600; color: var(--text-faint); }
@@ -263,6 +282,8 @@
   .history-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; gap: 8px; }
   .history-item:last-child { border-bottom: none; }
   .history-item strong { color: var(--text); font-weight: 600; }
+  .history-item strong.deposit-amount { color: var(--accent-ok); }
+  .history-item strong.expense-amount { color: var(--accent-over); }
   .history-main { display: flex; align-items: baseline; gap: 6px; min-width: 0; overflow: hidden; }
   .history-note { color: var(--text-faint); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .history-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -321,6 +342,8 @@
   .period-cat-row .cat-amounts { color: var(--text-soft); }
   .period-cat-row .cat-amounts strong { color: var(--text); }
   .period-cat-row.over .cat-amounts strong { color: var(--accent-over); }
+  .period-cat-row.period-deposit-summary { margin-bottom: 4px; }
+  .period-item-row.period-deposit-row span:first-child { color: var(--accent-ok); }
 
   .setup-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .setup-header-actions .setup-done-btn { font-size: 12.5px; padding: 8px 12px; }
@@ -369,6 +392,8 @@
   .print-account-name { font-size: 12px; font-weight: 700; text-transform: uppercase; margin: 10px 0 4px; }
   .print-cat-row { display: flex; justify-content: space-between; font-size: 12.5px; padding: 2px 0; }
   .print-item-row { display: flex; justify-content: space-between; font-size: 11.5px; padding: 1px 0 1px 12px; color: #333; }
+  .print-expense-amount { color: #B23A35; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .print-deposit-amount { color: #2E7D5B; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 
   .trends-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .trends-table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
@@ -378,6 +403,7 @@
   .trends-table .trends-period-col { font-weight: 600; color: var(--text); position: sticky; left: 0; background: var(--bg); }
   .trends-table td strong { color: var(--text); }
   .trends-table td.trends-over strong { color: var(--accent-over); }
+  .trends-table td strong.deposit-amount { color: var(--accent-ok); }
   .trends-table .trends-of { color: var(--text-faint); font-size: 11.5px; }
   .trends-table .trends-empty-cell { color: var(--text-faint); }
 </style>
@@ -892,6 +918,12 @@
           note: typeof it.note === 'string' ? it.note : '',
           date: typeof it.date === 'number' ? it.date : null
         })) : []
+      })) : [],
+      deposits: Array.isArray(acc.deposits) ? acc.deposits.filter(d => d && typeof d.amount === 'number' && !isNaN(d.amount)).map(d => ({
+        id: d.id || uid(),
+        amount: d.amount,
+        note: typeof d.note === 'string' ? d.note : '',
+        date: typeof d.date === 'number' ? d.date : null
       })) : []
     }));
 
@@ -973,6 +1005,19 @@
           <input type="number" min="0" step="0.01" placeholder="Set balance" data-acc="${acc.id}" class="bal-input" />
           <button class="set-btn" data-acc="${acc.id}">Set</button>
         </div>
+        <button class="add-deposit-toggle-btn" data-acc="${acc.id}">+ Add deposit</button>
+        <div class="deposit-form hidden" data-acc="${acc.id}">
+          <div class="deposit-form-row">
+            <span>$</span>
+            <input type="number" min="0" step="0.01" placeholder="Amount" class="deposit-amount-input" />
+            <input type="date" class="deposit-date-input" value="${toDateInputValue(Date.now())}" aria-label="Deposit date" />
+          </div>
+          <div class="deposit-form-row">
+            <input type="text" placeholder="Note (optional)" class="deposit-note-input" maxlength="60" />
+            <button class="deposit-submit-btn">Add</button>
+          </div>
+        </div>
+        <div class="deposit-history" data-acc="${acc.id}"></div>
         <div class="cat-container" data-acc="${acc.id}"></div>
       `;
       accSection.appendChild(card);
@@ -981,6 +1026,27 @@
       setBtn.addEventListener('click', () => setAccountBalance(acc.id));
       const balInput = card.querySelector('.bal-input');
       balInput.addEventListener('keydown', e => { if (e.key === 'Enter') setAccountBalance(acc.id); });
+
+      const depositToggleBtn = card.querySelector('.add-deposit-toggle-btn');
+      const depositForm = card.querySelector('.deposit-form');
+      depositToggleBtn.addEventListener('click', () => {
+        depositForm.classList.toggle('hidden');
+        if (!depositForm.classList.contains('hidden')) {
+          depositForm.querySelector('.deposit-amount-input').focus();
+        }
+      });
+
+      const depositAmountInput = depositForm.querySelector('.deposit-amount-input');
+      const depositDateInput = depositForm.querySelector('.deposit-date-input');
+      const depositNoteInput = depositForm.querySelector('.deposit-note-input');
+      const depositSubmitBtn = depositForm.querySelector('.deposit-submit-btn');
+      const doDeposit = () => addDeposit(acc.id, depositAmountInput, depositDateInput, depositNoteInput, depositForm);
+      depositSubmitBtn.addEventListener('click', doDeposit);
+      depositAmountInput.addEventListener('keydown', e => { if (e.key === 'Enter') doDeposit(); });
+      depositNoteInput.addEventListener('keydown', e => { if (e.key === 'Enter') doDeposit(); });
+
+      const depositHistoryEl = card.querySelector('.deposit-history');
+      renderDepositHistory(acc, depositHistoryEl);
 
       const catContainer = card.querySelector('.cat-container');
       acc.categories.forEach(cat => {
@@ -1072,7 +1138,7 @@
               const noteStr = item.note ? escapeHtml(item.note) : '';
               return `<div class="history-item">
                 <span class="history-main">
-                  <strong>${fmt(item.amount)}</strong>
+                  <strong class="expense-amount">-${fmt(item.amount)}</strong>
                   ${noteStr ? `<span class="history-note">${noteStr}</span>` : ''}
                 </span>
                 <span class="history-right">
@@ -1132,6 +1198,98 @@
     showToast(acc.name + ' balance saved');
   }
 
+  function addDeposit(accId, amountInput, dateInput, noteInput, formEl) {
+    const val = parseFloat(amountInput.value);
+    if (!val || val <= 0) return;
+    pushUndoSnapshot();
+    const acc = state.accounts.find(a => a.id === accId);
+    const note = (noteInput && noteInput.value.trim()) || '';
+    const dateVal = dateInput.value ? dateInputValueToTimestamp(dateInput.value, Date.now()) : Date.now();
+
+    acc.balance = Math.round((acc.balance + val) * 100) / 100;
+    acc.deposits = acc.deposits || [];
+    acc.deposits.push({ id: uid(), amount: val, note: note, date: dateVal });
+
+    // Bump every category's budget up by the same proportional split, on top
+    // of whatever's already there — existing logged expenses are untouched.
+    acc.categories.forEach(cat => {
+      cat.budget = Math.round((cat.budget + val * (cat.splitPct / 100)) * 100) / 100;
+    });
+
+    amountInput.value = '';
+    noteInput.value = '';
+    dateInput.value = toDateInputValue(Date.now());
+    if (formEl) formEl.classList.add('hidden');
+
+    renderApp();
+    saveState();
+    showToast('Deposit added');
+  }
+
+  function renderDepositHistory(acc, containerEl) {
+    const deposits = acc.deposits || [];
+    if (deposits.length === 0) {
+      containerEl.innerHTML = '';
+      return;
+    }
+    const sorted = deposits.slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+    containerEl.innerHTML = sorted.map(dep => {
+      const dateVal = toDateInputValue(dep.date);
+      const noteStr = dep.note ? escapeHtml(dep.note) : '';
+      return `<div class="history-item deposit-item">
+        <span class="history-main">
+          <strong class="deposit-amount">+${fmt(dep.amount)}</strong>
+          ${noteStr ? `<span class="history-note">${noteStr}</span>` : ''}
+        </span>
+        <span class="history-right">
+          <input type="date" class="history-date-input" value="${dateVal}" data-dep-id="${dep.id}" aria-label="Deposit date" />
+          <button class="del-btn" data-dep-id="${dep.id}" aria-label="Remove deposit">&times;</button>
+        </span>
+      </div>`;
+    }).join('');
+
+    containerEl.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteDeposit(acc.id, btn.dataset.depId));
+    });
+    containerEl.querySelectorAll('.history-date-input').forEach(dateInput => {
+      dateInput.addEventListener('change', () => {
+        editDepositDate(acc.id, dateInput.dataset.depId, dateInput.value);
+      });
+    });
+  }
+
+  function deleteDeposit(accId, depId) {
+    const acc = state.accounts.find(a => a.id === accId);
+    if (!acc || !acc.deposits) return;
+    const idx = acc.deposits.findIndex(d => d.id === depId);
+    if (idx === -1) return;
+    const removed = acc.deposits[idx];
+    pushUndoSnapshot();
+
+    acc.balance = Math.round((acc.balance - removed.amount) * 100) / 100;
+    acc.categories.forEach(cat => {
+      cat.budget = Math.round((cat.budget - removed.amount * (cat.splitPct / 100)) * 100) / 100;
+    });
+    acc.deposits.splice(idx, 1);
+
+    renderApp();
+    saveState();
+    showToast('Deposit removed');
+  }
+
+  function editDepositDate(accId, depId, newDateVal) {
+    if (!newDateVal) return;
+    const acc = state.accounts.find(a => a.id === accId);
+    if (!acc || !acc.deposits) return;
+    const dep = acc.deposits.find(d => d.id === depId);
+    if (!dep) return;
+    pushUndoSnapshot();
+    dep.date = dateInputValueToTimestamp(newDateVal, dep.date);
+    renderApp();
+    saveState();
+    showToast('Date updated');
+  }
+
   function recalcCategoriesForAccount(acc) {
     acc.categories.forEach(cat => {
       cat.budget = acc.balance * (cat.splitPct / 100);
@@ -1142,22 +1300,33 @@
   const HISTORY_RETENTION_MS = 366 * 24 * 60 * 60 * 1000; // ~1 year
 
   function snapshotCurrentPeriodToHistory() {
+    const periodStartMs = state.periodStart || 0;
+    const periodEndMs = Date.now();
+
     const periodRecord = {
       start: state.periodStart || null,
-      end: Date.now(),
-      accounts: state.accounts.map(acc => ({
-        name: acc.name,
-        categories: acc.categories.map(cat => ({
-          name: cat.name,
-          budget: cat.budget,
-          spent: cat.items.reduce((s, it) => s + it.amount, 0),
-          items: cat.items.map(it => ({ amount: it.amount, note: it.note || '', date: it.date || null }))
-        }))
-      }))
+      end: periodEndMs,
+      accounts: state.accounts.map(acc => {
+        const depositsInPeriod = (acc.deposits || []).filter(d => {
+          const t = d.date || 0;
+          return t >= periodStartMs && t <= periodEndMs;
+        });
+        return {
+          name: acc.name,
+          deposits: depositsInPeriod.map(d => ({ amount: d.amount, note: d.note || '', date: d.date || null })),
+          categories: acc.categories.map(cat => ({
+            name: cat.name,
+            budget: cat.budget,
+            spent: cat.items.reduce((s, it) => s + it.amount, 0),
+            items: cat.items.map(it => ({ amount: it.amount, note: it.note || '', date: it.date || null }))
+          }))
+        };
+      })
     };
     const hasAnyCategory = periodRecord.accounts.some(a => a.categories.length > 0);
     const hasAnySpending = periodRecord.accounts.some(a => a.categories.some(c => c.spent > 0 || c.budget > 0));
-    if (hasAnyCategory && hasAnySpending) {
+    const hasAnyDeposits = periodRecord.accounts.some(a => a.deposits.length > 0);
+    if ((hasAnyCategory && hasAnySpending) || hasAnyDeposits) {
       state.pastPeriods = state.pastPeriods || [];
       state.pastPeriods.unshift(periodRecord);
       pruneOldPeriods();
@@ -1300,17 +1469,24 @@
       return;
     }
 
-    // Build a stable, ordered list of "Account › Category" columns across all periods,
-    // in the order they first appear (most recent period first).
+    // Build a stable, ordered list of columns across all periods — one column per
+    // Account/Category pair, plus one "Deposits" column per account that has any.
     const columnKeys = [];
     const columnLabels = {};
     periods.forEach(period => {
       period.accounts.forEach(acc => {
+        if (acc.deposits && acc.deposits.length > 0) {
+          const depKey = 'deposit|||' + acc.name;
+          if (!columnKeys.includes(depKey)) {
+            columnKeys.push(depKey);
+            columnLabels[depKey] = { account: acc.name, category: 'Deposits', isDeposit: true };
+          }
+        }
         acc.categories.forEach(cat => {
-          const key = acc.name + '|||' + cat.name;
+          const key = 'cat|||' + acc.name + '|||' + cat.name;
           if (!columnKeys.includes(key)) {
             columnKeys.push(key);
-            columnLabels[key] = { account: acc.name, category: cat.name };
+            columnLabels[key] = { account: acc.name, category: cat.name, isDeposit: false };
           }
         });
       });
@@ -1332,15 +1508,24 @@
       const endStr = formatPeriodDate(period.end);
       const rangeStr = startStr ? `${startStr} – ${endStr}` : endStr;
 
-      const lookup = {};
+      const catLookup = {};
+      const depositLookup = {};
       period.accounts.forEach(acc => {
         acc.categories.forEach(cat => {
-          lookup[acc.name + '|||' + cat.name] = cat;
+          catLookup['cat|||' + acc.name + '|||' + cat.name] = cat;
         });
+        if (acc.deposits && acc.deposits.length > 0) {
+          depositLookup['deposit|||' + acc.name] = acc.deposits.reduce((s, d) => s + d.amount, 0);
+        }
       });
 
       const cellsHtml = columnKeys.map(key => {
-        const cat = lookup[key];
+        if (columnLabels[key].isDeposit) {
+          const total = depositLookup[key];
+          if (total === undefined) return '<td class="trends-empty-cell">—</td>';
+          return `<td><strong class="deposit-amount">+${fmt(total)}</strong></td>`;
+        }
+        const cat = catLookup[key];
         if (!cat) return '<td class="trends-empty-cell">—</td>';
         const over = cat.spent > cat.budget;
         return `<td class="${over ? 'trends-over' : ''}"><strong>${fmt(cat.spent)}</strong><span class="trends-of"> of ${fmt(cat.budget)}</span></td>`;
@@ -1387,19 +1572,22 @@
       return;
     }
 
-    const rows = [['Period Start', 'Period End', 'Account', 'Category', 'Category Budget', 'Category Spent', 'Expense Amount', 'Expense Note', 'Expense Date']];
+    const rows = [['Period Start', 'Period End', 'Account', 'Type', 'Category', 'Category Budget', 'Category Spent', 'Amount', 'Note', 'Date']];
 
     periods.forEach(period => {
       const periodStart = csvDate(period.start);
       const periodEnd = csvDate(period.end);
       period.accounts.forEach(acc => {
+        (acc.deposits || []).forEach(dep => {
+          rows.push([periodStart, periodEnd, acc.name, 'Deposit', '', '', '', dep.amount.toFixed(2), dep.note || '', csvDate(dep.date)]);
+        });
         acc.categories.forEach(cat => {
           const items = cat.items || [];
           if (items.length === 0) {
-            rows.push([periodStart, periodEnd, acc.name, cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), '', '', '']);
+            rows.push([periodStart, periodEnd, acc.name, 'Expense', cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), '', '', '']);
           } else {
             items.forEach(it => {
-              rows.push([periodStart, periodEnd, acc.name, cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), it.amount.toFixed(2), it.note || '', csvDate(it.date)]);
+              rows.push([periodStart, periodEnd, acc.name, 'Expense', cat.name, cat.budget.toFixed(2), cat.spent.toFixed(2), (-it.amount).toFixed(2), it.note || '', csvDate(it.date)]);
             });
           }
         });
@@ -1445,8 +1633,19 @@
       const rangeStr = startStr ? `${startStr} – ${endStr}` : `Ending ${endStr}`;
 
       const accountsHtml = period.accounts
-        .filter(acc => acc.categories.length > 0)
+        .filter(acc => acc.categories.length > 0 || (detailLevel === 'detailed' && acc.deposits && acc.deposits.length > 0))
         .map(acc => {
+          const deposits = acc.deposits || [];
+          const depositTotal = deposits.reduce((s, d) => s + d.amount, 0);
+          let depositsHtml = '';
+          if (depositTotal > 0 && detailLevel === 'detailed') {
+            depositsHtml = `<div class="print-cat-row"><span>Deposited</span><span class="print-deposit-amount">+${fmt(depositTotal)}</span></div>`;
+            depositsHtml += deposits.slice().sort((a, b) => (b.date || 0) - (a.date || 0)).map(d => {
+              const dateStr = d.date ? formatPeriodDate(d.date) : '';
+              const noteStr = d.note ? ` — ${escapeHtml(d.note)}` : '';
+              return `<div class="print-item-row"><span class="print-deposit-amount">+${fmt(d.amount)}${noteStr}</span><span>${dateStr}</span></div>`;
+            }).join('');
+          }
           const catsHtml = acc.categories.map(cat => {
             const summaryRow = `<div class="print-cat-row"><span>${escapeHtml(cat.name)}</span><span>${fmt(cat.spent)} of ${fmt(cat.budget)}</span></div>`;
             if (detailLevel !== 'detailed') return summaryRow;
@@ -1454,11 +1653,11 @@
             const itemsHtml = items.map(it => {
               const dateStr = it.date ? formatPeriodDate(it.date) : '';
               const noteStr = it.note ? ` — ${escapeHtml(it.note)}` : '';
-              return `<div class="print-item-row"><span>${fmt(it.amount)}${noteStr}</span><span>${dateStr}</span></div>`;
+              return `<div class="print-item-row"><span class="print-expense-amount">-${fmt(it.amount)}${noteStr}</span><span>${dateStr}</span></div>`;
             }).join('');
             return summaryRow + itemsHtml;
           }).join('');
-          return `<p class="print-account-name">${escapeHtml(acc.name)}</p>${catsHtml}`;
+          return `<p class="print-account-name">${escapeHtml(acc.name)}</p>${depositsHtml}${catsHtml}`;
         }).join('');
 
       return `<div class="print-period">
@@ -1475,8 +1674,19 @@
 
   function buildPeriodDetailHtml(period) {
     return period.accounts
-      .filter(acc => acc.categories.length > 0)
+      .filter(acc => acc.categories.length > 0 || (acc.deposits && acc.deposits.length > 0))
       .map(acc => {
+        const deposits = (acc.deposits || []).slice().sort((a, b) => (b.date || 0) - (a.date || 0));
+        const depositsHtml = deposits.length === 0 ? '' : `
+          <div class="period-detail-cat">
+            <p class="period-detail-cat-name">Deposits</p>
+            ${deposits.map(d => {
+              const dateStr = d.date ? formatPeriodDate(d.date) : '';
+              const noteStr = d.note ? ` — ${escapeHtml(d.note)}` : '';
+              return `<div class="period-item-row period-deposit-row"><span>+${fmt(d.amount)}${noteStr}</span><span class="period-item-date">${dateStr}</span></div>`;
+            }).join('')}
+          </div>`;
+
         const catsHtml = acc.categories.map(cat => {
           const items = (cat.items || []).slice().sort((a, b) => (b.date || 0) - (a.date || 0));
           const itemsHtml = items.length === 0
@@ -1484,14 +1694,14 @@
             : items.map(it => {
                 const dateStr = it.date ? formatPeriodDate(it.date) : '';
                 const noteStr = it.note ? ` — ${escapeHtml(it.note)}` : '';
-                return `<div class="period-item-row"><span>${fmt(it.amount)}${noteStr}</span><span class="period-item-date">${dateStr}</span></div>`;
+                return `<div class="period-item-row"><span class="expense-amount">-${fmt(it.amount)}${noteStr}</span><span class="period-item-date">${dateStr}</span></div>`;
               }).join('');
           return `<div class="period-detail-cat">
             <p class="period-detail-cat-name">${escapeHtml(cat.name)}</p>
             ${itemsHtml}
           </div>`;
         }).join('');
-        return `<p class="period-account-name">${escapeHtml(acc.name)}</p>${catsHtml}`;
+        return `<p class="period-account-name">${escapeHtml(acc.name)}</p>${depositsHtml}${catsHtml}`;
       }).join('');
   }
 
