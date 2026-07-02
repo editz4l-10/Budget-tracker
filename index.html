@@ -1365,6 +1365,7 @@
     snapshotCurrentPeriodToHistory();
     state.accounts.forEach(acc => {
       acc.balance = Math.round((acc.balance + p * (acc.splitPct / 100)) * 100) / 100;
+      acc.deposits = [];
       acc.categories.forEach(cat => {
         cat.items = []; // start fresh period after snapshot
         cat.budget = acc.balance * (cat.splitPct / 100);
@@ -1419,6 +1420,7 @@
     pushUndoSnapshot();
     snapshotCurrentPeriodToHistory();
     state.accounts.forEach(acc => {
+      acc.deposits = [];
       acc.categories.forEach(cat => {
         cat.items = [];
         cat.budget = 0;
