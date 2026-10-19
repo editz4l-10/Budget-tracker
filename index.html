@@ -325,6 +325,22 @@
   .setup-cat-row input[type="text"] { flex: 1; min-width: 0; font-size: 13px; padding: 7px 9px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; }
   .setup-cat-row input[type="number"] { width: 60px; font-size: 13px; padding: 7px 7px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); outline: none; text-align: right; }
   .add-link-btn { font-size: 12.5px; color: var(--text-soft); background: none; border: none; cursor: pointer; padding: 4px 0; font-weight: 500; }
+  .remainder-btn { font-size: 11px; padding: 5px 9px; border: 1px solid var(--border); border-radius: 7px; background: transparent; color: var(--text-soft); cursor: pointer; white-space: nowrap; }
+  .remainder-btn:hover { background: var(--border-light); color: var(--text); }
+  .remainder-btn.active { border-color: var(--accent-ok); color: var(--accent-ok); background: transparent; }
+  .remainder-label { font-size: 10.5px; color: var(--accent-ok); font-weight: 500; }
+  .remainder-auto-label { font-size: 12px; color: var(--text-faint); font-style: italic; }
+  .split-type-toggle { display: flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; flex-shrink: 0; }
+  .split-type-btn { font-size: 12px; padding: 5px 10px; border: none; background: transparent; color: var(--text-soft); cursor: pointer; }
+  .split-type-btn:hover { background: var(--border-light); }
+  .split-type-btn.active { background: var(--text); color: var(--card); }
+  .priority-arrows { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+  .priority-arrow { font-size: 10px; padding: 4px 7px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: var(--text-soft); cursor: pointer; line-height: 1; }
+  .priority-arrow:hover:not(:disabled) { background: var(--border-light); color: var(--text); }
+  .priority-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+  .priority-label { font-size: 11px; color: var(--text-faint); min-width: 20px; text-align: center; }
+  .preview-fixed { font-size: 10.5px; color: var(--text-faint); }
+  .preview-short { font-size: 10.5px; color: var(--accent-warn); font-weight: 600; }
   .add-link-btn:hover { color: var(--text); }
   .pct-total-row { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; margin-top: 4px; padding: 0 2px; }
   .pct-total-row.bad { color: var(--accent-over); }
@@ -334,6 +350,34 @@
   .setup-error-banner { background: #FBEAEA; border: 1px solid #E6BFBE; color: var(--accent-over); font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-bottom: 1rem; }
 
   .period-card { background: var(--card); border: 1px solid var(--border-light); border-radius: 14px; padding: 14px 16px; margin-bottom: 12px; }
+
+  .help-section-title { font-size: 13px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 4px; }
+  .help-section-sub { font-size: 12px; color: var(--text-faint); margin: 0 0 14px; }
+  .help-accordion { margin-bottom: 1.5rem; }
+  .help-item { border-bottom: 1px solid var(--border-light); }
+  .help-item:last-child { border-bottom: none; }
+  .help-q {
+    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+    font-size: 13.5px; font-weight: 600; color: var(--text); padding: 12px 0;
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  }
+  .help-q::after { content: '+'; font-size: 18px; color: var(--text-faint); flex-shrink: 0; line-height: 1; }
+  .help-q.open::after { content: '−'; }
+  .help-a { padding: 0 0 14px; font-size: 13px; color: var(--text-soft); line-height: 1.6; }
+  .help-a p { margin: 0 0 8px; }
+  .help-a p:last-child { margin-bottom: 0; }
+  .help-a ol, .help-a ul { margin: 6px 0 8px; padding-left: 1.4rem; }
+  .help-a li { margin-bottom: 4px; }
+  .help-a strong { color: var(--text); }
+  .help-a code { font-family: monospace; font-size: 12px; background: var(--border-light); padding: 1px 5px; border-radius: 4px; }
+  .help-tip { font-size: 12px; background: var(--border-light); border-radius: 8px; padding: 8px 10px; margin-top: 8px !important; color: var(--text-soft) !important; }
+
+  .help-ref-group { margin-bottom: 1.5rem; }
+  .help-ref-heading { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-soft); margin: 0 0 8px; }
+  .help-ref-row { display: flex; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+  .help-ref-row:last-child { border-bottom: none; }
+  .help-ref-label { font-weight: 600; color: var(--text); min-width: 120px; flex-shrink: 0; }
+  .help-ref-desc { color: var(--text-soft); line-height: 1.5; }
   .period-range { font-size: 12px; color: var(--text-soft); font-weight: 600; margin: 0 0 10px; }
   .period-account-name { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin: 10px 0 6px; }
   .period-account-name:first-child { margin-top: 0; }
@@ -451,6 +495,7 @@
         <div class="more-menu hidden" id="more-menu-dropdown">
           <button class="more-menu-item" id="backup-export-btn">⬇ Backup (export)</button>
           <button class="more-menu-item" id="backup-import-btn">⬆ Restore (import)</button>
+          <button class="more-menu-item" id="help-btn">? Help</button>
         </div>
       </div>
       <button class="icon-btn" id="lock-out-btn">🔒</button>
@@ -543,6 +588,170 @@
       <button class="setup-done-btn" id="trends-close-btn">Close</button>
     </div>
     <div id="trends-content"></div>
+  </div>
+</div>
+
+<div class="setup-overlay hidden" id="help-overlay">
+  <div class="setup-inner">
+    <div class="setup-header">
+      <p class="setup-title">Help</p>
+      <button class="setup-done-btn" id="help-close-btn">Close</button>
+    </div>
+
+    <p class="help-section-title">Quick start</p>
+    <p class="help-section-sub">Tap a task to expand it.</p>
+
+    <div class="help-accordion">
+
+      <div class="help-item">
+        <button class="help-q">How do I set up my accounts for the first time?</button>
+        <div class="help-a hidden">
+          <p>When you first log in, the app opens the <strong>Accounts &amp; categories</strong> setup screen automatically.</p>
+          <ol>
+            <li>Click <strong>+ Add account</strong> for each bank account you have (e.g. Checking, Savings).</li>
+            <li>Give each one a name and set what <strong>percentage of your paycheck</strong> it should receive. All accounts must add up to 100% — or mark one as <strong>Remainder</strong> to absorb any rounding difference automatically.</li>
+            <li>Under each account, click <strong>+ Add category</strong> to create spending buckets (e.g. Groceries, Car). Set the % split for each — these must also add up to 100% within their account.</li>
+            <li>Click <strong>Done</strong> when it all adds up. You're ready to go.</li>
+          </ol>
+          <p class="help-tip">💡 You can change accounts and categories anytime via <strong>⚙ Edit accounts</strong> in the top bar.</p>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I apply a paycheck?</button>
+        <div class="help-a hidden">
+          <p>On the main screen, find the <strong>New paycheck</strong> section. Type your paycheck amount and hit <strong>Apply paycheck</strong>.</p>
+          <p>The app will:</p>
+          <ul>
+            <li>Split the amount across your accounts by their percentages</li>
+            <li>Recalculate each category's budget based on the new account balance</li>
+            <li>Save the previous period's spending to History</li>
+            <li>Clear expenses and deposits, ready for the new period</li>
+          </ul>
+          <p>The preview pills below the input show exactly how much each account will receive before you confirm.</p>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I log an expense?</button>
+        <div class="help-a hidden">
+          <p>Each spending category has an <strong>Add</strong> row at the bottom of its card. Enter the amount, optionally add a note, and press <strong>Add</strong> or hit Enter.</p>
+          <ul>
+            <li>The expense is deducted from the category's remaining budget <em>and</em> from the parent account's balance simultaneously</li>
+            <li>The progress bar turns <strong>amber</strong> when you've used 80% of the budget, and <strong>red</strong> when you go over</li>
+            <li>Each expense shows as a <span style="color:#C2453F">red negative</span> entry in the history list below the category</li>
+            <li>To remove an expense, click the <strong>&times;</strong> button next to it — this also refunds the amount back to the account balance</li>
+            <li>To correct an expense's date, click the date shown next to it — it becomes editable</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I add a deposit (money that isn't a paycheck)?</button>
+        <div class="help-a hidden">
+          <p>Under each account card, click <strong>+ Add deposit</strong>. Enter the amount, a date, and an optional note, then click <strong>Add</strong>.</p>
+          <ul>
+            <li>The amount is added to the account's balance</li>
+            <li>Each category's budget is bumped up proportionally by its split percentage</li>
+            <li>Existing logged expenses are <em>not</em> cleared — this isn't a new period, just extra money coming in</li>
+            <li>Deposits show as <span style="color:#5DAA8B">green positive</span> entries under the account card</li>
+            <li>Deposits are cleared when you apply a new paycheck or start a new pay period</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I start a new pay period without a paycheck?</button>
+        <div class="help-a hidden">
+          <p>Scroll to the bottom of the main screen and click <strong>↻ New pay period</strong>. This saves the current period's spending to History, clears all expenses, deposits, and category budgets, and resets the tracker for a fresh start — without adding any money to your balances.</p>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I view past pay periods?</button>
+        <div class="help-a hidden">
+          <p>Click <strong>📅 History</strong> in the top bar. Each saved period shows the date range and a summary of budget vs. spent per category.</p>
+          <ul>
+            <li>Click <strong>More info</strong> on any period to expand it and see every individual expense and deposit</li>
+            <li>Each period shows how long until it's automatically deleted (periods older than 1 year are removed)</li>
+            <li>Use <strong>Trends</strong> to see spending across multiple periods in a table</li>
+            <li>Use <strong>Export CSV</strong> to download history as a spreadsheet</li>
+            <li>Use <strong>Print</strong> to print history — choose Summary or Detailed before printing</li>
+            <li>Individual periods can be deleted with the <strong>&times;</strong> button, or all at once with <strong>Clear all history</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I undo a mistake?</button>
+        <div class="help-a hidden">
+          <p>Click <strong>↶ Undo</strong> in the top bar to reverse the last action. Click it again to go further back (up to 20 steps). <strong>↷ Redo</strong> re-applies an undone action.</p>
+          <p class="help-tip">⚠️ Undo history is session-only — it clears when you reload the page or log out.</p>
+        </div>
+      </div>
+
+      <div class="help-item">
+        <button class="help-q">How do I back up or restore my data?</button>
+        <div class="help-a hidden">
+          <p>Click <strong>⋯</strong> in the top bar, then choose <strong>⬇ Backup (export)</strong> to download a complete <code>.json</code> file of all your accounts, balances, and history. Store it somewhere safe.</p>
+          <p>To restore, click <strong>⋯ → ⬆ Restore (import)</strong>, pick the backup file, and confirm. This replaces everything currently in your account — use Undo immediately after if something looks wrong (before reloading the page).</p>
+          <p class="help-tip">💡 Export a backup before making big setup changes, just in case.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="help-section-title" style="margin-top: 2rem;">Full reference</p>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">Top bar buttons</p>
+      <div class="help-ref-row"><span class="help-ref-label">↶ Undo / ↷ Redo</span><span class="help-ref-desc">Step back or forward through your last 20 actions. Greyed out when nothing is available. Cleared on page reload.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">📅 History</span><span class="help-ref-desc">View all saved pay periods, with spending summaries and optional detail. Also contains Trends, Export CSV, Print, and Clear all history.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">⚙ Edit accounts</span><span class="help-ref-desc">Add, rename, or remove accounts and their spending categories. Set percentage splits. Changes take effect immediately and are saved to the cloud.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">☀️ / 🌙</span><span class="help-ref-desc">Toggle dark mode. Your preference is saved on this device.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">⋯ More</span><span class="help-ref-desc">Opens a menu with Backup (export), Restore (import), and this Help screen.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">🔒</span><span class="help-ref-desc">Signs you out. Your data stays saved in the cloud — just log back in to pick up where you left off.</span></div>
+    </div>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">Account cards</p>
+      <div class="help-ref-row"><span class="help-ref-label">Balance display</span><span class="help-ref-desc">Your current real balance in that account, updated as you log expenses and deposits. Expenses reduce it; deposits and paychecks increase it.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Set balance</span><span class="help-ref-desc">Manually correct the balance if it drifts from your real bank (e.g. interest, fees). Recalculates category budgets. Does not clear logged expenses.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">+ Add deposit</span><span class="help-ref-desc">Log money added to this account outside of a paycheck. Adds to balance, bumps category budgets proportionally, keeps logged expenses intact.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">★ Remainder (in setup)</span><span class="help-ref-desc">Marks this account to receive whatever's left after all other accounts get their percentage cut — ensures the full paycheck is always accounted for even with odd-cent splits.</span></div>
+    </div>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">Paycheck section</p>
+      <div class="help-ref-row"><span class="help-ref-label">Preview pills</span><span class="help-ref-desc">Show exactly how much each account receives before you confirm. Updates live as you type.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Apply paycheck</span><span class="help-ref-desc">Distributes the amount, saves the current period to History, clears expenses and deposits, and recalculates category budgets from new balances.</span></div>
+    </div>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">Category cards</p>
+      <div class="help-ref-row"><span class="help-ref-label">Progress bar</span><span class="help-ref-desc">Green = under 80% spent. Amber = 80–100%. Red = over budget.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Remaining / Over budget</span><span class="help-ref-desc">How much budget is left this period. Goes red when you exceed your budget — spending still works, it just tracks the overage.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Add expense</span><span class="help-ref-desc">Amount (required) + note (optional). Press Enter or click Add. Deducted from this category's budget and the parent account balance.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Expense history</span><span class="help-ref-desc">Most recent expenses shown newest-first. Click the date to edit it. Click × to delete (refunds amount back to account balance).</span></div>
+    </div>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">History view</p>
+      <div class="help-ref-row"><span class="help-ref-label">Period card</span><span class="help-ref-desc">Shows the date range and a summary of budget vs. spent for each category. "Deletes in X days" shows when it will be auto-removed (after 1 year).</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">More info / Less info</span><span class="help-ref-desc">Expands the period to show every individual expense and deposit entry, with notes and dates.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Trends</span><span class="help-ref-desc">Table view: one row per period, one column per account/category. Good for spotting patterns over time. Deposit columns show in green.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Export CSV</span><span class="help-ref-desc">Downloads all history as a .csv file. Expense amounts are negative, deposits positive — so summing the Amount column gives a net figure.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Print</span><span class="help-ref-desc">Opens your browser's print dialog. Summary mode = budget vs. spent per category only. Detailed mode = includes every logged expense and deposit.</span></div>
+    </div>
+
+    <div class="help-ref-group">
+      <p class="help-ref-heading">Data &amp; privacy</p>
+      <div class="help-ref-row"><span class="help-ref-label">Cloud saving</span><span class="help-ref-desc">Every change saves automatically to your account. Access from any device by logging in — your data is tied to your account, not the device.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Forgot password</span><span class="help-ref-desc">On the login screen, click "Forgot password?" and enter your email. Firebase sends a reset link to your real email address.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">Backup / Restore</span><span class="help-ref-desc">Export a full .json backup of all your data at any time. Restore it later — on this account or another one. Keeps a copy independent of the cloud.</span></div>
+      <div class="help-ref-row"><span class="help-ref-label">History retention</span><span class="help-ref-desc">Pay period history older than 1 year is automatically deleted. Export as CSV if you want to keep records longer.</span></div>
+    </div>
+
   </div>
 </div>
 
@@ -656,6 +865,11 @@
         state = snap.data();
         if (!Array.isArray(state.pastPeriods)) state.pastPeriods = [];
         if (!state.periodStart) state.periodStart = Date.now();
+        state.accounts.forEach(acc => {
+          if (!acc.splitType) acc.splitType = 'pct';
+          if (acc.splitAmt == null) acc.splitAmt = 0;
+          if (acc.priority == null) acc.priority = 1;
+        });
         pruneOldPeriods();
       } else {
         state = defaultState();
@@ -907,7 +1121,11 @@
       id: acc.id || uid(),
       name: typeof acc.name === 'string' ? acc.name : 'Account',
       balance: typeof acc.balance === 'number' && !isNaN(acc.balance) ? acc.balance : 0,
+      splitType: acc.splitType === 'amt' ? 'amt' : 'pct',
       splitPct: typeof acc.splitPct === 'number' && !isNaN(acc.splitPct) ? acc.splitPct : 0,
+      splitAmt: typeof acc.splitAmt === 'number' && !isNaN(acc.splitAmt) ? acc.splitAmt : 0,
+      priority: typeof acc.priority === 'number' && !isNaN(acc.priority) ? acc.priority : 1,
+      isRemainder: acc.isRemainder === true,
       categories: Array.isArray(acc.categories) ? acc.categories.map(cat => ({
         id: cat.id || uid(),
         name: typeof cat.name === 'string' ? cat.name : 'Category',
@@ -998,7 +1216,7 @@
             <p class="account-card-label"><span class="dot" style="background:var(--${colorClass})"></span> ${escapeHtml(acc.name)}</p>
             <p class="account-balance">${fmt(acc.balance)}</p>
           </div>
-          <span class="account-pct">${acc.splitPct}% of paycheck</span>
+          <span class="account-pct">${acc.isRemainder ? '★ Remainder' : acc.splitType === 'amt' ? fmt(acc.splitAmt) + ' fixed #' + acc.priority : acc.splitPct + '% of paycheck'}</span>
         </div>
         <div class="account-input-row">
           <span>$</span>
@@ -1178,10 +1396,46 @@
   function updatePaycheckPreview() {
     const p = parseFloat(document.getElementById('paycheck-input').value) || 0;
     const area = document.getElementById('split-preview-area');
-    area.innerHTML = state.accounts.map(acc => {
-      const addedAmt = p * (acc.splitPct / 100);
-      return `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(addedAmt)}</strong></div>`;
-    }).join('');
+    const pills = new Array(state.accounts.length).fill(null);
+    let remaining = p;
+
+    // Fixed-amount accounts in priority order
+    const amtAccounts = state.accounts
+      .filter(a => a.splitType === 'amt' && !a.isRemainder)
+      .sort((a, b) => (a.priority || 1) - (b.priority || 1));
+    amtAccounts.forEach(acc => {
+      const share = Math.min(Math.round((acc.splitAmt || 0) * 100) / 100, Math.max(0, remaining));
+      remaining = Math.round((remaining - share) * 100) / 100;
+      const short = acc.splitAmt > 0 && share < acc.splitAmt;
+      const idx = state.accounts.indexOf(acc);
+      pills[idx] = `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(share)}</strong>${short ? ` <span class="preview-short">short</span>` : ` <span class="preview-fixed">#${acc.priority} fixed</span>`}</div>`;
+    });
+
+    // Percentage accounts
+    const pctAccounts = state.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
+    const totalPct = pctAccounts.reduce((s, a) => s + (a.splitPct || 0), 0);
+    let pctAllocated = 0;
+    pctAccounts.forEach((acc, i) => {
+      let share;
+      if (i === pctAccounts.length - 1) {
+        share = Math.round((remaining - pctAllocated) * 100) / 100;
+      } else {
+        share = totalPct > 0 ? Math.round(remaining * (acc.splitPct / totalPct) * 100) / 100 : 0;
+      }
+      pctAllocated = Math.round((pctAllocated + share) * 100) / 100;
+      const idx = state.accounts.indexOf(acc);
+      pills[idx] = `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(share)}</strong></div>`;
+    });
+
+    // Remainder account
+    const remainderAcc = state.accounts.find(a => a.isRemainder);
+    if (remainderAcc) {
+      const leftover = Math.round((remaining - pctAllocated) * 100) / 100;
+      const idx = state.accounts.indexOf(remainderAcc);
+      pills[idx] = `<div class="preview-pill">${escapeHtml(remainderAcc.name)} +<strong>${fmt(leftover)}</strong> <span class="remainder-label">remainder</span></div>`;
+    }
+
+    area.innerHTML = pills.filter(Boolean).join('');
   }
 
   function setAccountBalance(accId) {
@@ -1363,14 +1617,61 @@
     if (p <= 0) return;
     pushUndoSnapshot();
     snapshotCurrentPeriodToHistory();
-    state.accounts.forEach(acc => {
-      acc.balance = Math.round((acc.balance + p * (acc.splitPct / 100)) * 100) / 100;
+
+    let remaining = p;
+
+    // Step 1: fixed-amount accounts in priority order
+    const amtAccounts = state.accounts
+      .filter(a => a.splitType === 'amt' && !a.isRemainder)
+      .sort((a, b) => (a.priority || 1) - (b.priority || 1));
+
+    amtAccounts.forEach(acc => {
+      const share = Math.min(Math.round(acc.splitAmt * 100) / 100, Math.max(0, remaining));
+      remaining = Math.round((remaining - share) * 100) / 100;
+      acc.balance = Math.round((acc.balance + share) * 100) / 100;
       acc.deposits = [];
       acc.categories.forEach(cat => {
-        cat.items = []; // start fresh period after snapshot
+        cat.items = [];
         cat.budget = acc.balance * (cat.splitPct / 100);
       });
     });
+
+    // Step 2: percentage accounts split the remainder proportionally
+    const pctAccounts = state.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
+    const totalPct = pctAccounts.reduce((s, a) => s + (a.splitPct || 0), 0);
+    let pctAllocated = 0;
+
+    pctAccounts.forEach((acc, i) => {
+      let share;
+      if (i === pctAccounts.length - 1) {
+        // Last pct account gets exact remainder to avoid floating point drift
+        share = Math.round((remaining - pctAllocated) * 100) / 100;
+      } else {
+        share = totalPct > 0
+          ? Math.round(remaining * (acc.splitPct / totalPct) * 100) / 100
+          : 0;
+      }
+      pctAllocated = Math.round((pctAllocated + share) * 100) / 100;
+      acc.balance = Math.round((acc.balance + share) * 100) / 100;
+      acc.deposits = [];
+      acc.categories.forEach(cat => {
+        cat.items = [];
+        cat.budget = acc.balance * (cat.splitPct / 100);
+      });
+    });
+
+    // Step 3: remainder account gets whatever's truly left
+    const remainderAcc = state.accounts.find(a => a.isRemainder);
+    if (remainderAcc) {
+      const leftover = Math.round((remaining - pctAllocated) * 100) / 100;
+      remainderAcc.balance = Math.round((remainderAcc.balance + leftover) * 100) / 100;
+      remainderAcc.deposits = [];
+      remainderAcc.categories.forEach(cat => {
+        cat.items = [];
+        cat.budget = remainderAcc.balance * (cat.splitPct / 100);
+      });
+    }
+
     document.getElementById('paycheck-input').value = '';
     renderApp();
     saveState();
@@ -1459,6 +1760,25 @@
   document.getElementById('history-trends-btn').addEventListener('click', openTrends);
   document.getElementById('trends-close-btn').addEventListener('click', () => {
     document.getElementById('trends-overlay').classList.add('hidden');
+  });
+
+  // ---------- Help ----------
+  document.getElementById('help-btn').addEventListener('click', () => {
+    toggleMoreMenu(false);
+    document.getElementById('help-overlay').classList.remove('hidden');
+  });
+
+  document.getElementById('help-close-btn').addEventListener('click', () => {
+    document.getElementById('help-overlay').classList.add('hidden');
+  });
+
+  document.querySelectorAll('.help-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const answer = btn.nextElementSibling;
+      const isOpen = !answer.classList.contains('hidden');
+      answer.classList.toggle('hidden', isOpen);
+      btn.classList.toggle('open', !isOpen);
+    });
   });
 
   function openTrends() {
@@ -1793,9 +2113,28 @@
     document.getElementById('history-overlay').classList.remove('hidden');
   }
   document.getElementById('add-account-btn').addEventListener('click', () => {
-    setupDraft.accounts.push({ id: uid(), name: 'New account', balance: 0, splitPct: 0, categories: [] });
+    setupDraft.accounts.push({ id: uid(), name: 'New account', balance: 0, splitPct: 0, splitAmt: 0, splitType: 'pct', priority: setupDraft.accounts.filter(a => a.splitType === 'amt').length + 1, isRemainder: false, categories: [] });
     renderSetup();
   });
+
+  function rebalancePriorities() {
+    // After any structural change, reassign priorities 1,2,3... in current order
+    const amtAccounts = setupDraft.accounts.filter(a => a.splitType === 'amt' && !a.isRemainder);
+    amtAccounts.forEach((acc, i) => { acc.priority = i + 1; });
+  }
+
+  function swapPriority(acc, direction) {
+    // direction: -1 = move up (lower number), +1 = move down (higher number)
+    const amtAccounts = setupDraft.accounts
+      .filter(a => a.splitType === 'amt' && !a.isRemainder)
+      .sort((a, b) => a.priority - b.priority);
+    const idx = amtAccounts.indexOf(acc);
+    const swapIdx = idx + direction;
+    if (swapIdx < 0 || swapIdx >= amtAccounts.length) return;
+    const temp = amtAccounts[swapIdx].priority;
+    amtAccounts[swapIdx].priority = acc.priority;
+    acc.priority = temp;
+  }
 
   function openSetup() {
     setupDraft = JSON.parse(JSON.stringify(state));
@@ -1806,10 +2145,39 @@
   function validateDraft() {
     const errors = [];
     if (setupDraft.accounts.length === 0) errors.push('Add at least one account.');
-    const accTotal = sumPct(setupDraft.accounts);
-    if (setupDraft.accounts.length > 0 && Math.round(accTotal) !== 100) {
-      errors.push(`Account percentages add up to ${accTotal}%, not 100%.`);
+
+    const remainderAccounts = setupDraft.accounts.filter(a => a.isRemainder);
+    if (remainderAccounts.length > 1) errors.push('Only one account can be the remainder account.');
+    const hasRemainder = remainderAccounts.length === 1;
+
+    const amtAccounts = setupDraft.accounts.filter(a => a.splitType === 'amt' && !a.isRemainder);
+    const pctAccounts = setupDraft.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
+
+    // Fixed-amount accounts: each needs a positive amount
+    amtAccounts.forEach(acc => {
+      if (!acc.splitAmt || acc.splitAmt <= 0) {
+        errors.push(`"${acc.name || 'Unnamed'}" needs a fixed dollar amount greater than $0.`);
+      }
+    });
+
+    // Percentage accounts: must sum to 100% among themselves (or be empty if remainder covers leftovers)
+    if (pctAccounts.length > 0) {
+      const pctTotal = sumPct(pctAccounts);
+      if (!hasRemainder) {
+        if (Math.round(pctTotal) !== 100) {
+          errors.push(`Percentage accounts add up to ${pctTotal}%, not 100%.`);
+        }
+      } else {
+        if (pctTotal >= 100) {
+          errors.push(`Percentage accounts already add up to ${pctTotal}% — nothing left for the remainder account.`);
+        }
+      }
+    } else if (!hasRemainder && amtAccounts.length > 0) {
+      // Only fixed-amount accounts, no remainder — leftover paycheck has nowhere to go
+      errors.push('Add a % account or mark one account as Remainder to receive any leftover after fixed amounts.');
     }
+
+    // Per-account validation
     setupDraft.accounts.forEach(acc => {
       if (!acc.name.trim()) errors.push('Every account needs a name.');
       if (acc.categories.length > 0) {
@@ -1822,9 +2190,9 @@
         });
       }
     });
+
     return errors;
   }
-
   function renderSetup() {
     const errors = validateDraft();
     const errorArea = document.getElementById('setup-error-area');
@@ -1840,11 +2208,34 @@
       const accTotal = sumPct(setupDraft.accounts);
       const card = document.createElement('div');
       card.className = 'setup-account';
+      const isAmt = acc.splitType === 'amt';
+      const amtAccounts = setupDraft.accounts.filter(a => a.splitType === 'amt' && !a.isRemainder);
+      const amtAccIdx = amtAccounts.indexOf(acc);
+      const canMoveUp = isAmt && amtAccIdx > 0;
+      const canMoveDown = isAmt && amtAccIdx < amtAccounts.length - 1;
+
       card.innerHTML = `
         <div class="setup-row">
           <input type="text" value="${escapeHtml(acc.name)}" data-field="name" placeholder="Account name" />
-          <input type="number" min="0" max="100" step="1" value="${acc.splitPct}" data-field="splitPct" />
-          <span class="setup-pct-suffix">%</span>
+          <div class="split-type-toggle">
+            <button class="split-type-btn ${!isAmt ? 'active' : ''}" data-action="set-pct">%</button>
+            <button class="split-type-btn ${isAmt ? 'active' : ''}" data-action="set-amt">$</button>
+          </div>
+          ${isAmt && !acc.isRemainder ? `
+            <span class="setup-pct-suffix">$</span>
+            <input type="number" min="0" step="0.01" value="${acc.splitAmt || ''}" data-field="splitAmt" placeholder="0.00" />
+            <div class="priority-arrows">
+              <button class="priority-arrow" data-action="priority-up" ${canMoveUp ? '' : 'disabled'} title="Higher priority">▲</button>
+              <span class="priority-label">#${acc.priority}</span>
+              <button class="priority-arrow" data-action="priority-down" ${canMoveDown ? '' : 'disabled'} title="Lower priority">▼</button>
+            </div>
+          ` : !acc.isRemainder ? `
+            <input type="number" min="0" max="100" step="1" value="${acc.splitPct}" data-field="splitPct" placeholder="0" />
+            <span class="setup-pct-suffix">%</span>
+          ` : `
+            <span class="setup-pct-suffix remainder-auto-label">auto</span>
+          `}
+          <button class="remainder-btn ${acc.isRemainder ? 'active' : ''}" data-action="toggle-remainder" title="Absorb rounding differences">${acc.isRemainder ? '★ Remainder' : '☆ Remainder'}</button>
           <button class="remove-btn" data-action="remove-account" aria-label="Remove account">&times;</button>
         </div>
         <div class="setup-categories" data-acc-idx="${accIdx}"></div>
@@ -1855,12 +2246,59 @@
         acc.name = e.target.value;
         refreshSetupValidation();
       });
-      card.querySelector('[data-field="splitPct"]').addEventListener('input', e => {
-        acc.splitPct = parseFloat(e.target.value) || 0;
-        refreshSetupValidation();
+
+      const splitPctInput = card.querySelector('[data-field="splitPct"]');
+      if (splitPctInput) {
+        splitPctInput.addEventListener('input', e => {
+          acc.splitPct = parseFloat(e.target.value) || 0;
+          refreshSetupValidation();
+        });
+      }
+
+      const splitAmtInput = card.querySelector('[data-field="splitAmt"]');
+      if (splitAmtInput) {
+        splitAmtInput.addEventListener('input', e => {
+          acc.splitAmt = parseFloat(e.target.value) || 0;
+          refreshSetupValidation();
+        });
+      }
+
+      card.querySelector('[data-action="set-pct"]').addEventListener('click', () => {
+        acc.splitType = 'pct';
+        renderSetup();
+      });
+      card.querySelector('[data-action="set-amt"]').addEventListener('click', () => {
+        acc.splitType = 'amt';
+        if (!acc.priority) {
+          acc.priority = setupDraft.accounts.filter(a => a.splitType === 'amt').length;
+        }
+        renderSetup();
+      });
+
+      const upBtn = card.querySelector('[data-action="priority-up"]');
+      const downBtn = card.querySelector('[data-action="priority-down"]');
+      if (upBtn) {
+        upBtn.addEventListener('click', () => {
+          swapPriority(acc, -1);
+          renderSetup();
+        });
+      }
+      if (downBtn) {
+        downBtn.addEventListener('click', () => {
+          swapPriority(acc, 1);
+          renderSetup();
+        });
+      }
+
+      card.querySelector('[data-action="toggle-remainder"]').addEventListener('click', () => {
+        const wasRemainder = acc.isRemainder;
+        setupDraft.accounts.forEach(a => { a.isRemainder = false; });
+        acc.isRemainder = !wasRemainder;
+        renderSetup();
       });
       card.querySelector('[data-action="remove-account"]').addEventListener('click', () => {
         setupDraft.accounts.splice(accIdx, 1);
+        rebalancePriorities();
         renderSetup();
       });
       card.querySelector('[data-action="add-category"]').addEventListener('click', () => {
@@ -1918,11 +2356,21 @@
       : '';
     document.getElementById('setup-done-btn').disabled = errors.length > 0;
 
-    const accTotal = sumPct(setupDraft.accounts);
+    const hasRemainder = setupDraft.accounts.some(a => a.isRemainder);
+    const pctAccounts = setupDraft.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
+    const pctTotal = sumPct(pctAccounts);
     const accTotalRow = document.getElementById('accounts-total-row');
     if (accTotalRow) {
-      accTotalRow.textContent = `Accounts total: ${accTotal}%`;
-      accTotalRow.className = 'pct-total-row ' + (Math.round(accTotal) === 100 ? 'good' : 'bad');
+      if (pctAccounts.length === 0) {
+        accTotalRow.textContent = hasRemainder ? 'Remainder will receive leftover' : 'No % accounts';
+        accTotalRow.className = 'pct-total-row ' + (hasRemainder ? 'good' : 'bad');
+      } else if (hasRemainder) {
+        accTotalRow.textContent = `% accounts total: ${pctTotal}% + remainder`;
+        accTotalRow.className = 'pct-total-row ' + (pctTotal < 100 ? 'good' : 'bad');
+      } else {
+        accTotalRow.textContent = `% accounts total: ${pctTotal}%`;
+        accTotalRow.className = 'pct-total-row ' + (Math.round(pctTotal) === 100 ? 'good' : 'bad');
+      }
     }
 
     setupDraft.accounts.forEach(acc => {
