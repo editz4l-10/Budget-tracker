@@ -1411,17 +1411,12 @@
       pills[idx] = `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(share)}</strong>${short ? ` <span class="preview-short">short</span>` : ` <span class="preview-fixed">#${acc.priority} fixed</span>`}</div>`;
     });
 
-    // Percentage accounts
+    // Percentage accounts: each takes their % of the original paycheck, capped at remaining
     const pctAccounts = state.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
-    const totalPct = pctAccounts.reduce((s, a) => s + (a.splitPct || 0), 0);
     let pctAllocated = 0;
-    pctAccounts.forEach((acc, i) => {
-      let share;
-      if (i === pctAccounts.length - 1) {
-        share = Math.round((remaining - pctAllocated) * 100) / 100;
-      } else {
-        share = totalPct > 0 ? Math.round(remaining * (acc.splitPct / totalPct) * 100) / 100 : 0;
-      }
+    pctAccounts.forEach((acc) => {
+      const ideal = Math.round(p * (acc.splitPct / 100) * 100) / 100;
+      const share = Math.min(ideal, Math.max(0, remaining - pctAllocated));
       pctAllocated = Math.round((pctAllocated + share) * 100) / 100;
       const idx = state.accounts.indexOf(acc);
       pills[idx] = `<div class="preview-pill">${escapeHtml(acc.name)} +<strong>${fmt(share)}</strong></div>`;
@@ -1636,20 +1631,20 @@
       });
     });
 
-    // Step 2: percentage accounts split the remainder proportionally
+    // Step 2: percentage accounts each take their % of the ORIGINAL paycheck (p),
+    // capped at what's actually remaining after fixed-amount accounts.
     const pctAccounts = state.accounts.filter(a => a.splitType === 'pct' && !a.isRemainder);
-    const totalPct = pctAccounts.reduce((s, a) => s + (a.splitPct || 0), 0);
     let pctAllocated = 0;
 
     pctAccounts.forEach((acc, i) => {
       let share;
       if (i === pctAccounts.length - 1) {
-        // Last pct account gets exact remainder to avoid floating point drift
-        share = Math.round((remaining - pctAllocated) * 100) / 100;
+        // Last pct account: give it its full share or whatever's left, whichever is less
+        const ideal = Math.round(p * (acc.splitPct / 100) * 100) / 100;
+        share = Math.min(ideal, Math.max(0, remaining - pctAllocated));
       } else {
-        share = totalPct > 0
-          ? Math.round(remaining * (acc.splitPct / totalPct) * 100) / 100
-          : 0;
+        const ideal = Math.round(p * (acc.splitPct / 100) * 100) / 100;
+        share = Math.min(ideal, Math.max(0, remaining - pctAllocated));
       }
       pctAllocated = Math.round((pctAllocated + share) * 100) / 100;
       acc.balance = Math.round((acc.balance + share) * 100) / 100;
